@@ -18,10 +18,7 @@ public class Subscriber
     public void AddNewSubscription(string subscriptionName)
     {
         // Eventually we will have a db layer that queries but we'll set it up locally for now 
-        if (Subscriptions == null)
-        {
-            Subscriptions = new List<string>();
-        }
+        Subscriptions ??= new List<string>();
         
         // Read app settings.json
         var config = new ConfigurationBuilder()
@@ -47,9 +44,16 @@ public class Subscriber
 
     public void RemoveExistingSubscription(string subscriptionName)
     {
-        //Todo: Again we'll probably add some db interaction here, for now just remove it from the user object
-        
-        
-        
+        // if subscription is null instanciate
+        Subscriptions ??= new List<string>();
+
+        if (Subscriptions.Contains(subscriptionName))
+        {
+            Subscriptions.Remove(subscriptionName);
+        }
+        else
+        {
+            throw new Exception($"Subscription not found for {Name}");
+        }
     }
 }
