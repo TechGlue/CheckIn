@@ -1,5 +1,6 @@
 // Creating a minimal api to send daily notis 
 // First figure out how to subsribe to a route
+
 using CheckMeInService.Controllers;
 using CheckMeInService.Models;
 
@@ -18,6 +19,18 @@ app.MapGet("/DE", (AzureSqlHandler azureSqlHandler) =>
 {
     azureSqlHandler.AddNewSubscription("Excercise");
     return Results.Ok("Check on the console output");
+});
+
+app.MapGet("/TestConnection", (AzureSqlHandler azureSqlHandler) =>
+{
+    try
+    {
+        return Results.Ok(azureSqlHandler.TestConnection());
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest("Sql connection failed: " + e.Message);
+    }
 });
 
 app.Run();
