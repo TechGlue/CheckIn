@@ -18,9 +18,40 @@ public class Subscriber
 
     public void AddNewSubscription(string subscriptionName)
     {
-        // Evantually we will have a db that queries but we'll wee
+        // Eventually we will have a db layer that queries but we'll set it up locally for now 
+        if (Subscriptions == null)
+        {
+            Subscriptions = new List<string>();
+        }
+        
+        // Read app settings.json
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+        
+        // check if subscription is offered
+        // Todo: We'll probably add some db interaction here, for now just read from appsettings.json
+        var subscriptions = config.GetSection("SmsSubscription").Get<List<string>>();
+
+        // check if subscription is offered using linq
+        bool isOffered = subscriptions != null && subscriptions.Select(word=> word.ToLower()).Contains(subscriptionName.ToLower());
+        
+        if (isOffered)
+        {
+            Subscriptions.Add(subscriptionName);
+        }
+        else
+        {
+            throw new Exception("Subscription not offered");
+        }
+    }
+
+
+    public void RemoveExistingSubscription(string subscriptionName)
+    {
+        //Todo: Again we'll probably add some db interaction here, for now just remove it from the user object
         
         
         
-    } 
+    }
 }
