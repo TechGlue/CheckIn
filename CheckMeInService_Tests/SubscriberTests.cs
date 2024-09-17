@@ -11,7 +11,6 @@ public class SubscriberTests
         //Arrange
         Subscriber newSubscriber = new Subscriber("Luis", "999-999-999");
         
-        
         // Act
         newSubscriber.AddNewSubscription("Excercise");
 

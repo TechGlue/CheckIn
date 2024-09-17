@@ -1,6 +1,5 @@
 namespace CheckMeInService.Models;
 
-// This will be the object for handling queries too 
 public class Subscriber
 {
     private readonly Guid _subscriberId = Guid.NewGuid();
@@ -45,7 +44,6 @@ public class Subscriber
             throw new Exception("Subscription not offered");
         }
     }
-
 
     public void RemoveExistingSubscription(string subscriptionName)
     {
