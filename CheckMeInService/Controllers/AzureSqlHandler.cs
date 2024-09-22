@@ -1,5 +1,4 @@
 using CheckMeInService.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Data.SqlClient;
 
 namespace CheckMeInService.Controllers;
