@@ -9,7 +9,7 @@ public class SubscriberTests
     public void AddNewSubscription_GivenValidSubscriptionName_RegisterSubscriptionForUser()
     {
         //Arrange
-        Subscriber newSubscriber = new Subscriber("Luis", "999-999-999");
+        Subscriber newSubscriber = new Subscriber(null, "Bill", "Burr", "999-999-999");
 
         // Act
         newSubscriber.AddNewSubscription("Exercise");
@@ -24,7 +24,7 @@ public class SubscriberTests
     public void RemoveExistingSubscription_GivenValidSubscriptionName_RegisterSubscriptionForUser()
     {
         //Arrange
-        Subscriber newSubscriber = new Subscriber("Luis", "999-999-999");
+        Subscriber newSubscriber = new Subscriber(null, "Bill", "Burr", "999-999-999");
 
         // Act
         newSubscriber.AddNewSubscription("Exercise");
@@ -41,7 +41,7 @@ public class SubscriberTests
     public void RemoveExistingSubscription_GivenInvalidSubscriptionName_RemoveExistingSubscriptionThrowsException()
     {
         //Arrange
-        Subscriber newSubscriber = new Subscriber("Luis", "999-999-999");
+        Subscriber newSubscriber = new Subscriber(null, "Bill", "Burr", "999-999-999");
 
 
         // Act
@@ -58,9 +58,8 @@ public class SubscriberTests
     public void AddNewSubscription_GivenValidSubscriptionName_RegisterSubscriptionForUserThrowsException()
     {
         //Arrange
-        Subscriber newSubscriber = new Subscriber("Luis", "999-999-999");
-
-
+        Subscriber newSubscriber = new Subscriber(null, "Bill", "Burr", "999-999-999");
+        
         // Act
         newSubscriber.AddNewSubscription("NotExercise");
 

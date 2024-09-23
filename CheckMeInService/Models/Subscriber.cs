@@ -2,14 +2,25 @@ namespace CheckMeInService.Models;
 
 public class Subscriber
 {
-    private readonly Guid _subscriberId = Guid.NewGuid();
-    public string Name;
+    private readonly Guid _subscriberId;
+    public string FirstName;
+    public string LastName;
     public string PhoneNumber; 
     public List<string>? Subscriptions = null;
     
-    public Subscriber(string name, string phoneNumber )
+    public Subscriber(Guid? guid, string firstName, string lastName, string phoneNumber )
     {
-        Name = name;
+        if (guid is null)
+        {
+            _subscriberId = Guid.NewGuid();
+        }
+        else
+        {
+            _subscriberId = (Guid)guid;
+        }
+
+        FirstName = firstName;
+        LastName = lastName;
         PhoneNumber = phoneNumber;
     }
     
@@ -53,7 +64,8 @@ public class Subscriber
         }
         else
         {
-            throw new Exception($"Subscription not found for {Name}");
+            throw new Exception($"Subscription not found for {FirstName} {LastName}");
         }
     }
 }
+
