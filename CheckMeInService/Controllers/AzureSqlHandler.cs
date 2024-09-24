@@ -13,23 +13,43 @@ public class AzureSqlHandler
         builder.UserID = settings.UserId;
         builder.Password = settings.Password;
         builder.InitialCatalog = settings.InitialCatalog;
+
+        // customize the timeouts to prevent timeouts
         builder.CommandTimeout = 180;
         builder.ConnectTimeout = 30;
     }
-    
+
     // Todo: figure out why entity framework can't bind the data from the SQL. It looks to be connecting so that's pretty good. 
-    public void AddNewSubscriber(string name, string phoneNumber)
+    public bool AddNewSubscriber(Subscriber newSubscriber)
     {
-        // Todo: Write logic for creating a new subscriber
-        using (var dbContext = new SubscribersContext(builder))
+        using (var subscriberContext = new SubscribersContext(builder))
         {
-            string canConnect = dbContext.Database.CanConnect() ?  "Connected to DB": "Could not connect";
-            var output = dbContext.Subscribers.ToList();
-            
-            Console.WriteLine(canConnect);
+            if (subscriberContext.Database.CanConnect() is false)
+            {
+                return false;
+            }
+
+            // Create a new subscriber
+            subscriberContext.Subscribers.Add(newSubscriber);
+            subscriberContext.SaveChanges();
         }
+
+        // indicating a successful database interaction
+        return true;
     }
-    
+
+    public bool VerifySubscriberExists(Subscriber subscriber)
+    {
+        using var subscriberContext = new SubscribersContext(builder);
+        if (subscriberContext.Database.CanConnect() is false)
+        {
+            return false;
+        }
+        var checkSubs = subscriberContext.Subscribers.FirstOrDefault(x => x.PhoneNumber == subscriber.PhoneNumber);
+        
+        return checkSubs != null;
+    }
+
     // Working entity framework sample it's binding correctly 
     // public void AddNewSubscriber(string name, string phoneNumber)
     // {
@@ -42,20 +62,18 @@ public class AzureSqlHandler
     //         Console.WriteLine(canConnect);
     //     }
     // }
-    
+
     public void RemoveSubscriber(string phoneNumber)
     {
         // Todo: Write logic for fetching and deleting a subscriber based on their phone number 
-        
     }
 
     // It's going to be just subscriptions 
-    public void AddNewSubscription(string subscriptionName, Subscriber subscriber )
+    public void AddNewSubscription(string subscriptionName, Subscriber subscriber)
     {
         // Todo: Write logic for adding a subscription for a subscriber
-        
     }
-    
+
     public string TestConnection()
     {
         using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
