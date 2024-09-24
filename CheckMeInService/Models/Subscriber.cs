@@ -1,30 +1,42 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+
 namespace CheckMeInService.Models;
 
 public class Subscriber
 {
-    private readonly Guid _subscriberId;
-    public string FirstName;
-    public string LastName;
-    public string PhoneNumber; 
-    public List<string>? Subscriptions = null;
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("SubscriberID")]
+    public Guid SubscriberId { get; set; }
     
-    public Subscriber(Guid? guid, string firstName, string lastName, string phoneNumber )
-    {
-        if (guid is null)
-        {
-            _subscriberId = Guid.NewGuid();
-        }
-        else
-        {
-            _subscriberId = (Guid)guid;
-        }
+    [Required]
+    [MaxLength(128)]
+    public string FirstName { get; set; }
+    
+    [Required]
+    [MaxLength(128)]
+    public string LastName { get; set; }
+    
+    [Required]
+    [MaxLength(15)]
+    [Index(IsUnique = true)]
+    public string PhoneNumber { get; set; }
+    
+    public List<string>? Subscriptions = null;
 
+    public Subscriber()
+    {
+    }
+    public Subscriber(Guid? subscriberId, string firstName, string lastName, string phoneNumber )
+    {
+        SubscriberId = subscriberId ?? Guid.NewGuid();
         FirstName = firstName;
         LastName = lastName;
         PhoneNumber = phoneNumber;
     }
-    
-    public string ReturnSubscriberId => _subscriberId.ToString();
+
+    public string ReturnSubscriberId => SubscriberId.ToString();
 
     public void AddNewSubscription(string subscriptionName)
     {

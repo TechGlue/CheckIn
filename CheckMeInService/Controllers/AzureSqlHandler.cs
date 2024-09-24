@@ -13,18 +13,35 @@ public class AzureSqlHandler
         builder.UserID = settings.UserId;
         builder.Password = settings.Password;
         builder.InitialCatalog = settings.InitialCatalog;
+        builder.CommandTimeout = 180;
+        builder.ConnectTimeout = 30;
     }
     
     // Todo: figure out why entity framework can't bind the data from the SQL. It looks to be connecting so that's pretty good. 
     public void AddNewSubscriber(string name, string phoneNumber)
     {
         // Todo: Write logic for creating a new subscriber
-        using (var db = new SubscribersContext(builder))
+        using (var dbContext = new SubscribersContext(builder))
         {
-            var subscribers = db.Subscribers;
-            Console.WriteLine("End of using statement");
+            string canConnect = dbContext.Database.CanConnect() ?  "Connected to DB": "Could not connect";
+            var output = dbContext.Subscribers.ToList();
+            
+            Console.WriteLine(canConnect);
         }
     }
+    
+    // Working entity framework sample it's binding correctly 
+    // public void AddNewSubscriber(string name, string phoneNumber)
+    // {
+    //     // Todo: Write logic for creating a new subscriber
+    //     using (var dbContext = new SubscribersContext(builder))
+    //     {
+    //         string canConnect = dbContext.Database.CanConnect() ?  "Connected to DB": "Could not connect";
+    //         var output = dbContext.Subscribers.ToList();
+    //         
+    //         Console.WriteLine(canConnect);
+    //     }
+    // }
     
     public void RemoveSubscriber(string phoneNumber)
     {
