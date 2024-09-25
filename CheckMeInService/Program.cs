@@ -16,7 +16,7 @@ app.MapGet("/AddSubscription",
         // Add the subscriber first if it does not exist
         Subscriber newSubscriber = new Subscriber
         {
-            FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
+             FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
         };
 
         // if member does not exist add the subscriber first 

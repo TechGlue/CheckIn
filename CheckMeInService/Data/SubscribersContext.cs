@@ -6,15 +6,17 @@ namespace CheckMeInService.Models;
 public class SubscribersContext : DbContext
 {
     public DbSet<Subscriber> Subscribers { get; set; }
-    private SqlConnectionStringBuilder _databaseSettings { get; set; }
+    public DbSet<Subscriptions> Subscriptions { get; set; }
+    
+    private SqlConnectionStringBuilder DatabaseSettings { get;}
 
     public SubscribersContext(SqlConnectionStringBuilder settings)
     {
-        _databaseSettings = settings;
+        DatabaseSettings = settings;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(_databaseSettings.ConnectionString);
+        optionsBuilder.UseSqlServer(DatabaseSettings.ConnectionString);
     }
 }
