@@ -10,6 +10,8 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Tester");
 
+
+// this should be the go to endpoints for everything 
 app.MapGet("/AddSubscription",
     (AzureSqlHandler azureSqlHandler, string firstName, string lastName, string phoneNumber) =>
     {
@@ -23,6 +25,9 @@ app.MapGet("/AddSubscription",
         if (!azureSqlHandler.VerifySubscriberExists(newSubscriber))
         {
             azureSqlHandler.AddNewSubscriber(newSubscriber);
+            
+            
+            // Then add the rest of the logic for creating a new subscription here 
         }
         
        // Todo: add logic for adding a subscription, need to add the dbContext for the other models 
