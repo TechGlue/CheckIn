@@ -70,15 +70,15 @@ public class AzureSqlHandler
     {
         using (SubscribersContext subscriberContext = new SubscribersContext(_builder))
         {
-            Subscriptions newSubscription = new Subscriptions
+            ActiveSubscriptions newSubscription = new ActiveSubscriptions 
             {
                 SubscriberId = subscriber.SubscriberId,
                 SubscriptionId = subscription.SubscriptionId,
                 SubscriptionStartDate = DateTime.Now,
                 PhoneNumber = subscriber.PhoneNumber
             };
-
-            subscriberContext.Subscriptions.Add(newSubscription);
+            
+            subscriberContext.ActiveSubscriptions.Add(newSubscription);
             subscriberContext.SaveChanges();
         }
     }

@@ -6,7 +6,7 @@ namespace CheckMeInService.Models;
 public class SubscribersContext : DbContext
 {
     public DbSet<Subscriber> Subscribers { get; set; }
-    public DbSet<Subscriptions> Subscriptions { get; set; }
+    public DbSet<ActiveSubscriptions> ActiveSubscriptions { get; set; }
     public DbSet<OfferedSubscriptions> OfferedSubscriptions { get; set; }
     
     private SqlConnectionStringBuilder DatabaseSettings { get;}

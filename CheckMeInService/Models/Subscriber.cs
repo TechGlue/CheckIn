@@ -22,8 +22,6 @@ public class Subscriber
     [Index(IsUnique = true)]
     public string PhoneNumber { get; set; }
     
-    public List<string>? Subscriptions = null;
-
     public Subscriber()
     {
     }

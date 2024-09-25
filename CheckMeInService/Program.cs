@@ -21,28 +21,31 @@ app.MapGet("/AddSubscription",
             FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
         };
 
+        OfferedSubscriptions? offeredSubscription = azureSqlHandler.GetSubscription("Exercise");
+
+        if (offeredSubscription is null)
+        {
+            return Results.BadRequest("Subscription not found");
+        }
+
         if (!azureSqlHandler.VerifySubscriberExists(newSubscriber))
         {
             // We have the subscriber here
             azureSqlHandler.AddNewSubscriber(newSubscriber);
 
-            // add the 
+            // Now we can add the subscription 
+            azureSqlHandler.AddNewMemberSubscription(newSubscriber, offeredSubscription);
         }
 
         Subscriber? existingSubscriber = azureSqlHandler.FetchExistingSubscriber(phoneNumber);
-        OfferedSubscriptions? of = azureSqlHandler.GetSubscription("Excercise");
-        
+
         if (existingSubscriber is null)
         {
             return Results.BadRequest("Subscriber not found");
         }
 
-        if (of is null)
-        {
-            return Results.BadRequest("Given Subscription is currently not offered");
-        }
-
-        azureSqlHandler.AddNewMemberSubscription(existingSubscriber, of);
+        // Todo: refactor by adding a catch for people adding existing subscriptions
+        azureSqlHandler.AddNewMemberSubscription(existingSubscriber, offeredSubscription);
 
         return Results.Ok("Reached the end... Verify the table to ensure that the data is there.");
     });

@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CheckMeInService.Models;
 
-public class Subscriptions
+public class ActiveSubscriptions
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("ActiveSubscriptionID")]
     public Guid ActiveSubscriptionId { get; set; }
     
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("SubscriberID")]
     public Guid SubscriberId { get; set; }
     
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("SubscriptionID")]
     public Guid SubscriptionId { get; set; }
     
@@ -23,10 +23,10 @@ public class Subscriptions
     [MaxLength(15)]
     public string? PhoneNumber { get; set; }
     
-    public Subscriptions()
+    public ActiveSubscriptions()
     {
     }
-    public Subscriptions(Guid? activeSubscriptionId, Guid subscriberId, Guid subscriptionId, DateTime subscriptionStartDate, string? phoneNumber)
+    public ActiveSubscriptions(Guid? activeSubscriptionId, Guid subscriberId, Guid subscriptionId, DateTime subscriptionStartDate, string? phoneNumber)
     {
         ActiveSubscriptionId = activeSubscriptionId ?? Guid.NewGuid();
         SubscriberId = subscriberId; 
