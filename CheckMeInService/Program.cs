@@ -1,4 +1,4 @@
-using CheckMeInService.Controllers;
+using CheckMeInService.Data;
 using CheckMeInService.Models;
 
 // Dependency Injection, singleton pattern for intializing the database settings only once 
@@ -10,29 +10,41 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Tester");
 
+// Todo: add all these paths and any logic to a respective controllers folder
 
-// this should be the go to endpoints for everything 
 app.MapGet("/AddSubscription",
     (AzureSqlHandler azureSqlHandler, string firstName, string lastName, string phoneNumber) =>
     {
         // Add the subscriber first if it does not exist
         Subscriber newSubscriber = new Subscriber
         {
-             FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
+            FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
         };
 
-        // if member does not exist add the subscriber first 
         if (!azureSqlHandler.VerifySubscriberExists(newSubscriber))
         {
+            // We have the subscriber here
             azureSqlHandler.AddNewSubscriber(newSubscriber);
-            
-            
-            // Then add the rest of the logic for creating a new subscription here 
+
+            // add the 
         }
+
+        Subscriber? existingSubscriber = azureSqlHandler.FetchExistingSubscriber(phoneNumber);
+        OfferedSubscriptions? of = azureSqlHandler.GetSubscription("Excercise");
         
-       // Todo: add logic for adding a subscription, need to add the dbContext for the other models 
-        
-        return Results.Ok("Check on the console output");
+        if (existingSubscriber is null)
+        {
+            return Results.BadRequest("Subscriber not found");
+        }
+
+        if (of is null)
+        {
+            return Results.BadRequest("Given Subscription is currently not offered");
+        }
+
+        azureSqlHandler.AddNewMemberSubscription(existingSubscriber, of);
+
+        return Results.Ok("Reached the end... Verify the table to ensure that the data is there.");
     });
 
 app.MapGet("/TestConnection", (AzureSqlHandler azureSqlHandler) =>

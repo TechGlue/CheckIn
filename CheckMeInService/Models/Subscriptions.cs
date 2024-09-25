@@ -21,16 +21,16 @@ public class Subscriptions
     public DateTime SubscriptionStartDate { get; set; }
 
     [MaxLength(15)]
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
     
     public Subscriptions()
     {
     }
-    public Subscriptions(Guid? activeSubscriptionId, Guid? subscriberId, Guid? subscriptionId, DateTime subscriptionStartDate, string phoneNumber)
+    public Subscriptions(Guid? activeSubscriptionId, Guid subscriberId, Guid subscriptionId, DateTime subscriptionStartDate, string? phoneNumber)
     {
         ActiveSubscriptionId = activeSubscriptionId ?? Guid.NewGuid();
-        SubscriberId = subscriberId ?? Guid.NewGuid(); 
-        SubscriptionId = subscriptionId ?? Guid.NewGuid();
+        SubscriberId = subscriberId; 
+        SubscriptionId = subscriptionId;
         SubscriptionStartDate = subscriptionStartDate;
         PhoneNumber = phoneNumber;
     }
