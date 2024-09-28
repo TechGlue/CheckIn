@@ -42,7 +42,7 @@ public class AzureSqlHandler
         using SubscribersContext subscriberContext = new SubscribersContext(_builder);
         if (subscriberContext.Database.CanConnect() is false)
             return null;
-        
+
         return subscriberContext.OfferedSubscriptions.FirstOrDefault(x => x.SubscriptionName == subscriptionName);
     }
 
@@ -59,28 +59,44 @@ public class AzureSqlHandler
         return checkSubs != null;
     }
 
-    public void RemoveSubscriber(string phoneNumber)
+
+    public bool CheckForExistingSubscription(Subscriber subscriber, OfferedSubscriptions offeredSubscriptions)
+    {
+        using (SubscribersContext subscriberContext = new SubscribersContext(_builder))
+        {
+            var checkSubscription = subscriberContext.ActiveSubscriptions.FirstOrDefault(x =>
+                x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == offeredSubscriptions.SubscriptionId);
+            return checkSubscription != null;
+        }
+    }
+
+    public void UnEnrollSubscriber(Subscriber subscriber)
     {
         // Todo: Write logic for fetching and deleting a subscriber based on their phone number 
     }
 
-    
-    // Todo: refactor later... 
-    public void AddNewMemberSubscription(Subscriber subscriber, OfferedSubscriptions subscription)
+    public bool AddNewMemberSubscription(Subscriber subscriber, OfferedSubscriptions subscription)
     {
+        if (CheckForExistingSubscription(subscriber, subscription))
+        {
+            return false;
+        }
+
         using (SubscribersContext subscriberContext = new SubscribersContext(_builder))
         {
-            ActiveSubscriptions newSubscription = new ActiveSubscriptions 
+            ActiveSubscriptions newSubscription = new ActiveSubscriptions
             {
                 SubscriberId = subscriber.SubscriberId,
                 SubscriptionId = subscription.SubscriptionId,
                 SubscriptionStartDate = DateTime.Now,
                 PhoneNumber = subscriber.PhoneNumber
             };
-            
+
             subscriberContext.ActiveSubscriptions.Add(newSubscription);
             subscriberContext.SaveChanges();
         }
+
+        return true;
     }
 
     public Subscriber? FetchExistingSubscriber(string phoneNumber)

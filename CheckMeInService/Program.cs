@@ -1,8 +1,6 @@
 using CheckMeInService.Data;
 using CheckMeInService.Models;
 
-// Dependency Injection, singleton pattern for intializing the database settings only once 
-// Wherever that class is used it will be injected
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton(new DatabaseSettings("appsettings.json"));
 builder.Services.AddSingleton<AzureSqlHandler>();
@@ -44,10 +42,9 @@ app.MapGet("/AddSubscription",
             return Results.BadRequest("Subscriber not found");
         }
 
-        // Todo: refactor by adding a catch for people adding existing subscriptions
-        azureSqlHandler.AddNewMemberSubscription(existingSubscriber, offeredSubscription);
-
-        return Results.Ok("Reached the end... Verify the table to ensure that the data is there.");
+        bool response = azureSqlHandler.AddNewMemberSubscription(existingSubscriber, offeredSubscription);
+        
+        return response ? Results.Ok("Subscription added successfully") : Results.BadRequest("Subscription failed to add due to existing subscription");
     });
 
 app.MapGet("/TestConnection", (AzureSqlHandler azureSqlHandler) =>
