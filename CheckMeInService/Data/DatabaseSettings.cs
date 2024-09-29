@@ -1,3 +1,5 @@
+using Microsoft.Data.SqlClient;
+
 namespace CheckMeInService.Models;
 
 public class DatabaseSettings
@@ -19,5 +21,18 @@ public class DatabaseSettings
         UserId = config.GetSection("AzureSql:UserId").Value;
         Password = config.GetSection("AzureSql:Password").Value;
         InitialCatalog = config.GetSection("AzureSql:InitialCatalog").Value;
+    }
+    
+    public string GetConnectionString()
+    {
+        var builder = new SqlConnectionStringBuilder
+        {
+            DataSource = DataSource,
+            UserID = UserId,
+            Password = Password,
+            InitialCatalog = InitialCatalog
+        };
+
+        return builder.ConnectionString;
     }
 }

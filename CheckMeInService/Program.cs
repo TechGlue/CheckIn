@@ -3,7 +3,9 @@ using CheckMeInService.Models;
 using CheckMeInService.Subscribers;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton(new DatabaseSettings("appsettings.json"));
+DatabaseSettings settings = new DatabaseSettings("appsettings.json");
+
+builder.Services.AddSingleton(settings.GetConnectionString());
 builder.Services.AddSingleton<AzureSqlHandler>();
 var app = builder.Build();
 

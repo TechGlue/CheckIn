@@ -6,23 +6,16 @@ namespace CheckMeInService.Data;
 // Note with the entity framework queries. Everything is loaded into memory and then filtered.
 public class AzureSqlHandler
 {
-    readonly SqlConnectionStringBuilder _builder = new();
+    private readonly string _connectionString;
 
-    public AzureSqlHandler(DatabaseSettings settings)
+    public AzureSqlHandler(string connectionString)
     {
-        _builder.DataSource = settings.DataSource;
-        _builder.UserID = settings.UserId;
-        _builder.Password = settings.Password;
-        _builder.InitialCatalog = settings.InitialCatalog;
-
-        // customize the timeouts to prevent timeouts
-        _builder.CommandTimeout = 180;
-        _builder.ConnectTimeout = 30;
+        _connectionString = connectionString;
     }
 
     public bool AddNewSubscriber(Subscriber newSubscriber)
     {
-        using (var subscriberContext = new SubscribersContext(_builder.ConnectionString))
+        using (var subscriberContext = new SubscribersContext(_connectionString))
         {
             if (subscriberContext.Database.CanConnect() is false)
             {
@@ -40,7 +33,7 @@ public class AzureSqlHandler
 
     public OfferedSubscriptions? GetSubscription(string subscriptionName)
     {
-        using SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString);
+        using SubscribersContext subscriberContext = new SubscribersContext(_connectionString);
         if (subscriberContext.Database.CanConnect() is false)
             return null;
 
@@ -50,7 +43,7 @@ public class AzureSqlHandler
 
     public bool VerifySubscriberExists(Subscriber subscriber)
     {
-        using SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString);
+        using SubscribersContext subscriberContext = new SubscribersContext(_connectionString);
         if (subscriberContext.Database.CanConnect() is false)
         {
             return false;
@@ -64,7 +57,7 @@ public class AzureSqlHandler
 
     public bool CheckForExistingSubscription(Subscriber subscriber, OfferedSubscriptions offeredSubscriptions)
     {
-        using (SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString))
+        using (SubscribersContext subscriberContext = new SubscribersContext(_connectionString))
         {
             var checkSubscription = subscriberContext.ActiveSubscriptions.FirstOrDefault(x =>
                 x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == offeredSubscriptions.SubscriptionId);
@@ -79,7 +72,7 @@ public class AzureSqlHandler
             return false;
         }
 
-        using (SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString))
+        using (SubscribersContext subscriberContext = new SubscribersContext(_connectionString))
         {
             ActiveSubscriptions newSubscription = new ActiveSubscriptions
             {
@@ -98,7 +91,7 @@ public class AzureSqlHandler
 
     public Subscriber? FetchExistingSubscriber(string phoneNumber)
     {
-        using (SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString))
+        using (SubscribersContext subscriberContext = new SubscribersContext(_connectionString))
         {
             if (subscriberContext.Database.CanConnect() is false)
             {
@@ -111,28 +104,28 @@ public class AzureSqlHandler
         }
     }
 
-    public string TestConnection()
-    {
-        using (SqlConnection connection = new SqlConnection(_builder.ConnectionString))
-        {
-            connection.Open();
-            String sql = "SELECT name, collation_name FROM sys.databases";
+    // public string TestConnection()
+    // {
+    //     using (SqlConnection connection = new // SqlConnection(_connectionString))
+    //     {
+    //         connection.Open();
+    //         String sql = "SELECT name, collation_name // FROM sys.databases";
 
-            using (SqlCommand command = new SqlCommand(sql, connection))
-            {
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        if (reader.GetString(0) == _builder.InitialCatalog)
-                        {
-                            return "Database found: " + reader.GetString(0);
-                        }
-                    }
-                }
-            }
-        }
+    //         using (SqlCommand command = new SqlCommand// (sql, connection))
+    //         {
+    //             using (SqlDataReader reader = command// .ExecuteReader())
+    //             {
+    //                 while (reader.Read())
+    //                 {
+    //                     if (reader.GetString(0) == // _builder.InitialCatalog)
+    //                     {
+    //                         return "Database found: " + // reader.GetString(0);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        return $"Connection to Azure SQL DB {_builder.InitialCatalog} failed...";
-    }
+    //     return $"Connection to Azure SQL DB {_builder// .InitialCatalog} failed...";
+    // }
 }
