@@ -7,7 +7,7 @@ public static class SubscribersApi
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)
     {
-        group.MapGet("/AddSubscription",
+        group.MapPost("/AddSubscription",
             (AzureSqlHandler azureSqlHandler, string firstName, string lastName, string phoneNumber) =>
             {
                 // Add the subscriber first if it does not exist
@@ -49,8 +49,9 @@ public static class SubscribersApi
                 bool response = azureSqlHandler.AddNewMemberSubscription(existingSubscriber, offeredSubscription);
 
                 return response
-                    ? Results.BadRequest("Subscription failed to add due to existing subscription")
-                    : Results.Ok("Subscription added successfully");
+                        ? Results.Ok("Subscription added successfully")
+                        : Results.BadRequest("Subscription failed to add due to existing subscription")
+                    ;
             });
 
         return group;
