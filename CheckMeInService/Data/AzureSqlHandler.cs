@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CheckMeInService.Data;
 
+// Note with the entity framework queries. Everything is loaded into memory and then filtered.
 public class AzureSqlHandler
 {
     readonly SqlConnectionStringBuilder _builder = new();
@@ -21,7 +22,7 @@ public class AzureSqlHandler
 
     public bool AddNewSubscriber(Subscriber newSubscriber)
     {
-        using (var subscriberContext = new SubscribersContext(_builder))
+        using (var subscriberContext = new SubscribersContext(_builder.ConnectionString))
         {
             if (subscriberContext.Database.CanConnect() is false)
             {
@@ -39,16 +40,17 @@ public class AzureSqlHandler
 
     public OfferedSubscriptions? GetSubscription(string subscriptionName)
     {
-        using SubscribersContext subscriberContext = new SubscribersContext(_builder);
+        using SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString);
         if (subscriberContext.Database.CanConnect() is false)
             return null;
 
-        return subscriberContext.OfferedSubscriptions.FirstOrDefault(x => x.SubscriptionName == subscriptionName);
+        return subscriberContext.OfferedSubscriptions
+            .FirstOrDefault(x => x.SubscriptionName.ToLower() == subscriptionName.ToLower());
     }
 
     public bool VerifySubscriberExists(Subscriber subscriber)
     {
-        using SubscribersContext subscriberContext = new SubscribersContext(_builder);
+        using SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString);
         if (subscriberContext.Database.CanConnect() is false)
         {
             return false;
@@ -62,17 +64,12 @@ public class AzureSqlHandler
 
     public bool CheckForExistingSubscription(Subscriber subscriber, OfferedSubscriptions offeredSubscriptions)
     {
-        using (SubscribersContext subscriberContext = new SubscribersContext(_builder))
+        using (SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString))
         {
             var checkSubscription = subscriberContext.ActiveSubscriptions.FirstOrDefault(x =>
                 x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == offeredSubscriptions.SubscriptionId);
             return checkSubscription != null;
         }
-    }
-
-    public void UnEnrollSubscriber(Subscriber subscriber)
-    {
-        // Todo: Write logic for fetching and deleting a subscriber based on their phone number 
     }
 
     public bool AddNewMemberSubscription(Subscriber subscriber, OfferedSubscriptions subscription)
@@ -82,7 +79,7 @@ public class AzureSqlHandler
             return false;
         }
 
-        using (SubscribersContext subscriberContext = new SubscribersContext(_builder))
+        using (SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString))
         {
             ActiveSubscriptions newSubscription = new ActiveSubscriptions
             {
@@ -101,7 +98,7 @@ public class AzureSqlHandler
 
     public Subscriber? FetchExistingSubscriber(string phoneNumber)
     {
-        using (SubscribersContext subscriberContext = new SubscribersContext(_builder))
+        using (SubscribersContext subscriberContext = new SubscribersContext(_builder.ConnectionString))
         {
             if (subscriberContext.Database.CanConnect() is false)
             {

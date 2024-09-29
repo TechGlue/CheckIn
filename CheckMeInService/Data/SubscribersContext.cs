@@ -9,15 +9,16 @@ public class SubscribersContext : DbContext
     public DbSet<ActiveSubscriptions> ActiveSubscriptions { get; set; }
     public DbSet<OfferedSubscriptions> OfferedSubscriptions { get; set; }
     
-    private SqlConnectionStringBuilder DatabaseSettings { get;}
+    private string ConnectionString { get; set; } 
 
-    public SubscribersContext(SqlConnectionStringBuilder settings)
+    public SubscribersContext(string connectionString)
     {
-        DatabaseSettings = settings;
+        ConnectionString = connectionString;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(DatabaseSettings.ConnectionString);
+        optionsBuilder.UseSqlServer(ConnectionString
+        );
     }
 }
