@@ -1,3 +1,4 @@
+using CheckMeInService.Data;
 using CheckMeInService.Models;
 using Microsoft.EntityFrameworkCore;
 using Testcontainers.SqlEdge;
@@ -8,6 +9,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
 {
     private readonly SqlEdgeContainer _container;
     private SubscribersContext _dbContext;
+    private AzureSqlHandler azureSqlHandler;
 
     public AzureSqlHandler_Tests()
     {
@@ -21,9 +23,31 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
     [Fact]
     public async void TestAzureSqlHandler_TestSubscribers()
     {
+        // Arrange - Act
         var users = await _dbContext.Subscribers.ToListAsync();
+        
+        // Assert
         Assert.Equal(2, users.Count);
     }
+    
+    
+    [Fact]
+    public async void AddNewSubscriber_ValidSubscriber_ReturnsTrue()
+    {
+        // Arrange
+        Subscriber newSubscriber = new Subscriber(Guid.NewGuid(), "AddNewFirst", "AddNewLast", "555-555-3555");
+        
+        // Act
+        bool output  = azureSqlHandler.AddNewSubscriber(newSubscriber);
+        
+        var users = await _dbContext.Subscribers.ToListAsync();
+        
+        // Assert
+        Assert.True(output);
+        Assert.Equal(3, users.Count);
+        Assert.True(users.Exists(x => x.FirstName == newSubscriber.FirstName ));
+    }
+    
 
     public async Task InitializeAsync()
     {
@@ -31,6 +55,8 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
 
         _dbContext = new SubscribersContext(_container.GetConnectionString());
 
+        azureSqlHandler = new AzureSqlHandler(_container.GetConnectionString());
+        
         await _dbContext.Database.EnsureCreatedAsync();
 
         await SeedTestDataSubscribers();
