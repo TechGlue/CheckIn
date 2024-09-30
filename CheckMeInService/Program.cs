@@ -9,7 +9,7 @@ builder.Services.AddSingleton(settings.GetConnectionString());
 builder.Services.AddSingleton<AzureSqlHandler>();
 var app = builder.Build();
 
-app.MapGet("/", () => "Subscribers API is running");
+app.MapGet("/", () => "CheckMeIn API is running");
 
 app.MapGroup("/api/subscribers")
     .MapSubscribersApi()

@@ -1,7 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d0abde7a_002D7f80_002D42b4_002Da1f2_002D28223482c7da/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AddNewSubscription_GivenValidSubscriptionName_RegisterSubscriptionForUser" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.AzureSqlHandler_Tests.TestContainers_HelloWorld&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.AzureSqlHandler_Tests.TestAzureSqlHandler_AddSubscriber&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.AzureSqlHandler_Tests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

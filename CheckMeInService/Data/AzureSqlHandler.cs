@@ -54,7 +54,6 @@ public class AzureSqlHandler
         return checkSubs != null;
     }
 
-
     public bool CheckForExistingSubscription(Subscriber subscriber, OfferedSubscriptions offeredSubscriptions)
     {
         using (SubscribersContext subscriberContext = new SubscribersContext(_connectionString))
@@ -103,29 +102,4 @@ public class AzureSqlHandler
             return subscriber;
         }
     }
-
-    // public string TestConnection()
-    // {
-    //     using (SqlConnection connection = new // SqlConnection(_connectionString))
-    //     {
-    //         connection.Open();
-    //         String sql = "SELECT name, collation_name // FROM sys.databases";
-
-    //         using (SqlCommand command = new SqlCommand// (sql, connection))
-    //         {
-    //             using (SqlDataReader reader = command// .ExecuteReader())
-    //             {
-    //                 while (reader.Read())
-    //                 {
-    //                     if (reader.GetString(0) == // _builder.InitialCatalog)
-    //                     {
-    //                         return "Database found: " + // reader.GetString(0);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     return $"Connection to Azure SQL DB {_builder// .InitialCatalog} failed...";
-    // }
 }
