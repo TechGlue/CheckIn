@@ -30,9 +30,15 @@ BEGIN
 	  	PhoneNumber NVARCHAR(15) NOT NULL UNIQUE,
 	  )
 
-	  -- Initialize the one and only subscription offered
-	  INSERT INTO OfferedSubscriptions (SubscriptionName)
-	  VALUES('Exercise');
+	  -- Create the CheckIn table
+	  CREATE TABLE CheckIn
+	  (
+	  	CheckInId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID() NOT NULL,
+	  	ActiveSubscriptionsID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES ActiveSubscriptions(ActiveSubscriptionID) NOT NULL,
+	  	LastCheckInDate DATETIME NOT NULL,
+	  	FutureCheckInDate DATETIME NOT NULL,
+		CurrentStreak INT NOT NULL,
+	  )
 
     END TRY
     BEGIN CATCH

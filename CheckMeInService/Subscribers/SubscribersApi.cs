@@ -1,9 +1,9 @@
 using CheckMeInService.Data;
 using CheckMeInService.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CheckMeInService.Subscribers;
 
+// Controller responsible for managing the subscribers and their initials subscriptions
 public static class SubscribersApi
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)

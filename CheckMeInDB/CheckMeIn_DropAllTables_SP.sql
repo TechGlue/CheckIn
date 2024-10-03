@@ -7,6 +7,7 @@ BEGIN
 	  DROP TABLE dbo.ActiveSubscriptions;
 	  DROP TABLE dbo.Subscribers;
 	  DROP TABLE dbo.OfferedSubscriptions;
+	  DROP TABLE dbo.CheckIn;
     END TRY
     BEGIN CATCH
         SELECT
