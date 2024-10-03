@@ -1,5 +1,6 @@
 using CheckMeInService.Data;
 using CheckMeInService.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CheckMeInService.Subscribers;
 
@@ -7,8 +8,36 @@ public static class SubscribersApi
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)
     {
+        group.MapDelete("/RemoveSubscription",
+            (AzureSqlHandler azureSqlHandler, string phoneNumber, string subscriptionName) =>
+            {
+                // Fetch Subscriber
+                Subscriber? subscriber = azureSqlHandler.FetchExistingSubscriber(phoneNumber);
+
+                if (subscriber is null)
+                {
+                    return Results.BadRequest("Subscriber not found");
+                }
+
+                // Fetch Subscription
+                OfferedSubscriptions? subscription = azureSqlHandler.GetSubscription(subscriptionName);
+
+                if (subscription is null)
+                {
+                    return Results.BadRequest("Subscription not found");
+                }
+
+                // Remove Subscription
+                bool response = azureSqlHandler.RemoveActiveSubscription(subscriber, subscription);
+
+                return response
+                    ? Results.Ok("Subscription removed successfully")
+                    : Results.BadRequest("Failed to remove subscription");
+            });
+
         group.MapPost("/AddSubscription",
-            (AzureSqlHandler azureSqlHandler, string firstName, string lastName, string phoneNumber) =>
+            (AzureSqlHandler azureSqlHandler, string firstName, string lastName, string phoneNumber,
+                string subscriptionName) =>
             {
                 // Add the subscriber first if it does not exist
                 Subscriber newSubscriber = new Subscriber
@@ -16,7 +45,7 @@ public static class SubscribersApi
                     FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
                 };
 
-                OfferedSubscriptions? offeredSubscription = azureSqlHandler.GetSubscription("Exercise");
+                OfferedSubscriptions? offeredSubscription = azureSqlHandler.GetSubscription(subscriptionName);
 
                 if (offeredSubscription is null)
                 {

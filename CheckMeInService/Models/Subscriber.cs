@@ -32,15 +32,5 @@ public class Subscriber
         LastName = lastName;
         PhoneNumber = phoneNumber;
     }
-
-    public string ReturnSubscriberId => SubscriberId.ToString();
-
-    public void AddNewSubscription(string subscriptionName)
-    {
-    }
-
-    public void RemoveExistingSubscription(string subscriptionName)
-    {
-    }
 }
 

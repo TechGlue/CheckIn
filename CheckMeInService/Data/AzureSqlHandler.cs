@@ -1,9 +1,7 @@
 using CheckMeInService.Models;
-using Microsoft.Data.SqlClient;
 
 namespace CheckMeInService.Data;
 
-// Note with the entity framework queries. Everything is loaded into memory and then filtered.
 public class AzureSqlHandler
 {
     private readonly string _connectionString;
@@ -15,19 +13,16 @@ public class AzureSqlHandler
 
     public bool AddNewSubscriber(Subscriber newSubscriber)
     {
-        using (var subscriberContext = new SubscribersContext(_connectionString))
+        using var subscriberContext = new SubscribersContext(_connectionString);
+        if (subscriberContext.Database.CanConnect() is false)
         {
-            if (subscriberContext.Database.CanConnect() is false)
-            {
-                return false;
-            }
-
-            // Create a new subscriber
-            subscriberContext.Subscribers.Add(newSubscriber);
-            subscriberContext.SaveChanges();
+            return false;
         }
 
-        // indicating a successful database interaction
+        // Create a new subscriber
+        subscriberContext.Subscribers.Add(newSubscriber);
+        subscriberContext.SaveChanges();
+
         return true;
     }
 
@@ -56,12 +51,10 @@ public class AzureSqlHandler
 
     public bool CheckForExistingSubscription(Subscriber subscriber, OfferedSubscriptions offeredSubscriptions)
     {
-        using (SubscribersContext subscriberContext = new SubscribersContext(_connectionString))
-        {
-            var checkSubscription = subscriberContext.ActiveSubscriptions.FirstOrDefault(x =>
-                x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == offeredSubscriptions.SubscriptionId);
-            return checkSubscription != null;
-        }
+        using SubscribersContext subscriberContext = new SubscribersContext(_connectionString);
+        var checkSubscription = subscriberContext.ActiveSubscriptions.FirstOrDefault(x =>
+            x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == offeredSubscriptions.SubscriptionId);
+        return checkSubscription != null;
     }
 
     public bool AddNewMemberSubscription(Subscriber subscriber, OfferedSubscriptions subscription)
@@ -71,35 +64,52 @@ public class AzureSqlHandler
             return false;
         }
 
-        using (SubscribersContext subscriberContext = new SubscribersContext(_connectionString))
+        using SubscribersContext subscriberContext = new SubscribersContext(_connectionString);
+        ActiveSubscriptions newSubscription = new ActiveSubscriptions
         {
-            ActiveSubscriptions newSubscription = new ActiveSubscriptions
-            {
-                SubscriberId = subscriber.SubscriberId,
-                SubscriptionId = subscription.SubscriptionId,
-                SubscriptionStartDate = DateTime.Now,
-                PhoneNumber = subscriber.PhoneNumber
-            };
+            SubscriberId = subscriber.SubscriberId,
+            SubscriptionId = subscription.SubscriptionId,
+            SubscriptionStartDate = DateTime.Now,
+            PhoneNumber = subscriber.PhoneNumber
+        };
 
-            subscriberContext.ActiveSubscriptions.Add(newSubscription);
-            subscriberContext.SaveChanges();
-        }
+        subscriberContext.ActiveSubscriptions.Add(newSubscription);
+        subscriberContext.SaveChanges();
 
         return true;
     }
 
     public Subscriber? FetchExistingSubscriber(string phoneNumber)
     {
-        using (SubscribersContext subscriberContext = new SubscribersContext(_connectionString))
+        using SubscribersContext subscriberContext = new SubscribersContext(_connectionString);
+        if (subscriberContext.Database.CanConnect() is false)
         {
-            if (subscriberContext.Database.CanConnect() is false)
-            {
-                return null;
-            }
-
-            var subscriber = subscriberContext.Subscribers.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
-
-            return subscriber;
+            return null;
         }
+
+        var subscriber = subscriberContext.Subscribers.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+
+        return subscriber;
+    }
+
+    public bool RemoveActiveSubscription(Subscriber subscriber, OfferedSubscriptions subscription)
+    {
+        using SubscribersContext subscribersContext = new SubscribersContext(_connectionString);
+        if (subscribersContext.Database.CanConnect() is false)
+        {
+            return false;
+        }
+            
+        var activeSubscription = subscribersContext.ActiveSubscriptions.FirstOrDefault(x =>
+            x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == subscription.SubscriptionId);
+
+        if (activeSubscription is null)
+        {
+            return false;
+        }
+            
+        subscribersContext.ActiveSubscriptions.Remove(activeSubscription);
+        subscribersContext.SaveChanges();
+        return true;
     }
 }
