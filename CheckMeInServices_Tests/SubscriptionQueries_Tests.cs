@@ -5,13 +5,13 @@ using Testcontainers.SqlEdge;
 
 namespace CheckMeInServices_Tests;
 
-public class AzureSqlHandler_Tests : IAsyncLifetime
+public class SubscriptionQueries_Tests : IAsyncLifetime
 {
     private readonly SqlEdgeContainer _container;
-    private SubscribersContext _dbContext;
-    private AzureSqlHandler azureSqlHandler;
+    private CheckMeInContext _dbContext;
+    private SubscriptionQueries _subscriptionQueries;
 
-    public AzureSqlHandler_Tests()
+    public SubscriptionQueries_Tests()
     {
         _container = new SqlEdgeBuilder()
             .WithImage("mcr.microsoft.com/azure-sql-edge:1.0.7")
@@ -38,7 +38,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         Subscriber newSubscriber = new Subscriber(Guid.NewGuid(), "AddNewFirst", "AddNewLast", "555-555-3555");
 
         // Act
-        bool output = azureSqlHandler.AddNewSubscriber(newSubscriber);
+        bool output = _subscriptionQueries.AddNewSubscriber(newSubscriber);
 
         var users = await _dbContext.Subscribers.ToListAsync();
 
@@ -52,7 +52,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
     public void AddNewSubscriber_InvalidConnection_ReturnsFalse()
     {
         // Arrange
-        AzureSqlHandler failingConnection = new AzureSqlHandler("BadConnection");
+        SubscriptionQueries failingConnection = new SubscriptionQueries("BadConnection");
         Subscriber newSubscriber = new Subscriber(Guid.NewGuid(), "AddNewFirst", "AddNewLast", "555-555-3555");
 
         // Act
@@ -70,7 +70,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         _dbContext.SaveChanges();
 
         // Act
-        OfferedSubscriptions? validSubscription = azureSqlHandler.GetSubscription("TestSubscription");
+        OfferedSubscriptions? validSubscription = _subscriptionQueries.GetSubscription("TestSubscription");
         
         // Assert
         Assert.NotNull(validSubscription);
@@ -81,7 +81,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
     public void GetSubscription_InvalidSubscriptionName_ReturnsNullSubscription()
     {
         // Arrange - Act  
-       OfferedSubscriptions? invalidSubscription = azureSqlHandler.GetSubscription("InvalidSubscription"); 
+       OfferedSubscriptions? invalidSubscription = _subscriptionQueries.GetSubscription("InvalidSubscription"); 
         
         // Assert
         Assert.Null(invalidSubscription);
@@ -94,7 +94,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         Subscriber newSubscriber = new Subscriber(Guid.NewGuid(), "TesterFirst", "TesterLast", "555-555-1111");
         
         // Act
-        bool output = azureSqlHandler.VerifySubscriberExists(newSubscriber);
+        bool output = _subscriptionQueries.VerifySubscriberExists(newSubscriber);
         
         // Assert
         Assert.True(output);
@@ -107,7 +107,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         Subscriber newSubscriber = new Subscriber(Guid.NewGuid(), "TesterFirst", "TesterLast", "341-535-2345");
         
         // Act
-        bool output = azureSqlHandler.VerifySubscriberExists(newSubscriber);
+        bool output = _subscriptionQueries.VerifySubscriberExists(newSubscriber);
         
         // Assert
         Assert.False(output);
@@ -126,7 +126,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         _dbContext.Subscribers.Add(newSubscriber);
         _dbContext.ActiveSubscriptions.Add(new ActiveSubscriptions(Guid.NewGuid(), newSubscriber.SubscriberId, newSubscription.SubscriptionId, DateTime.Now, newSubscriber.PhoneNumber));
         _dbContext.SaveChanges();
-        bool validSubscription = azureSqlHandler.CheckForExistingSubscription(newSubscriber, newSubscription);
+        bool validSubscription = _subscriptionQueries.CheckForExistingSubscription(newSubscriber, newSubscription);
 
         // Assert  
         Assert.True(validSubscription);
@@ -142,7 +142,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         OfferedSubscriptions newSubscription = new OfferedSubscriptions(Guid.NewGuid(), "TestSubscriptionInvalid");
         
         // Act
-        bool validSubscription = azureSqlHandler.CheckForExistingSubscription(newSubscriber, newSubscription);
+        bool validSubscription = _subscriptionQueries.CheckForExistingSubscription(newSubscriber, newSubscription);
 
         // Assert - CheckForExistingSubscription should return true if the subscription is not NULL 
         Assert.False(validSubscription);
@@ -159,7 +159,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         _dbContext.OfferedSubscriptions.Add(newSubscription);
         _dbContext.Subscribers.Add(newSubscriber);
         _dbContext.SaveChanges();
-        bool validSubscription = azureSqlHandler.AddNewMemberSubscription(newSubscriber, newSubscription);
+        bool validSubscription = _subscriptionQueries.AddNewMemberSubscription(newSubscriber, newSubscription);
         ActiveSubscriptions? activeSubscriptions = _dbContext.ActiveSubscriptions.FirstOrDefault(x => x.SubscriberId == newSubscriber.SubscriberId);
         
         // Assert
@@ -178,8 +178,8 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         _dbContext.OfferedSubscriptions.Add(newSubscription);
         _dbContext.Subscribers.Add(newSubscriber);
         _dbContext.SaveChanges();
-        _ = azureSqlHandler.AddNewMemberSubscription(newSubscriber, newSubscription);
-        bool existingSubscription = azureSqlHandler.AddNewMemberSubscription(newSubscriber, newSubscription);
+        _ = _subscriptionQueries.AddNewMemberSubscription(newSubscriber, newSubscription);
+        bool existingSubscription = _subscriptionQueries.AddNewMemberSubscription(newSubscriber, newSubscription);
         
         // Assert
         Assert.False(existingSubscription);
@@ -192,7 +192,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         string existingPhoneNumber = "555-555-1111";
 
         // Act 
-        Subscriber? subscriber = azureSqlHandler.FetchExistingSubscriber(existingPhoneNumber);
+        Subscriber? subscriber = _subscriptionQueries.FetchExistingSubscriber(existingPhoneNumber);
 
         // Assert
         Assert.NotNull(subscriber);
@@ -205,7 +205,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         string nonexistentPhoneNumber = "000-000-0000";
 
         // Act 
-        Subscriber? subscriber = azureSqlHandler.FetchExistingSubscriber(nonexistentPhoneNumber);
+        Subscriber? subscriber = _subscriptionQueries.FetchExistingSubscriber(nonexistentPhoneNumber);
 
         // Assert
         Assert.Null(subscriber);
@@ -220,7 +220,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         OfferedSubscriptions newSubscription = new OfferedSubscriptions(Guid.NewGuid(), "RemoveActiveSubscription");
         
         // Act
-        bool output = azureSqlHandler.RemoveActiveSubscription(newSubscriber, newSubscription);
+        bool output = _subscriptionQueries.RemoveActiveSubscription(newSubscriber, newSubscription);
 
         // Assert
         Assert.False(output);
@@ -239,7 +239,7 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
         _dbContext.OfferedSubscriptions.Add(newSubscription);
         _dbContext.ActiveSubscriptions.Add(activeSubscription);
         _dbContext.SaveChanges();
-        bool validSubscription = azureSqlHandler.RemoveActiveSubscription(newSubscriber, newSubscription);
+        bool validSubscription = _subscriptionQueries.RemoveActiveSubscription(newSubscriber, newSubscription);
         
         // Assert
         Assert.True(validSubscription);
@@ -251,9 +251,9 @@ public class AzureSqlHandler_Tests : IAsyncLifetime
     {
         await _container.StartAsync();
 
-        _dbContext = new SubscribersContext(_container.GetConnectionString());
+        _dbContext = new CheckMeInContext(_container.GetConnectionString());
 
-        azureSqlHandler = new AzureSqlHandler(_container.GetConnectionString());
+        _subscriptionQueries = new SubscriptionQueries(_container.GetConnectionString());
 
         await _dbContext.Database.EnsureCreatedAsync();
 

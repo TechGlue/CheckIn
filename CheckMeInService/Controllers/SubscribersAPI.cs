@@ -4,12 +4,12 @@ using CheckMeInService.Models;
 namespace CheckMeInService.Subscribers;
 
 // Controller responsible for managing the subscribers and their initials subscriptions
-public static class SubscribersApi
+public static class SubscribersAPI
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)
     {
         group.MapDelete("/RemoveSubscription",
-            (AzureSqlHandler azureSqlHandler, string phoneNumber, string subscriptionName) =>
+            (SubscriptionQueries azureSqlHandler, string phoneNumber, string subscriptionName) =>
             {
                 // Fetch Subscriber
                 Subscriber? subscriber = azureSqlHandler.FetchExistingSubscriber(phoneNumber);
@@ -36,7 +36,7 @@ public static class SubscribersApi
             });
 
         group.MapPost("/AddSubscription",
-            (AzureSqlHandler azureSqlHandler, string firstName, string lastName, string phoneNumber,
+            (SubscriptionQueries azureSqlHandler, string firstName, string lastName, string phoneNumber,
                 string subscriptionName) =>
             {
                 // Add the subscriber first if it does not exist
