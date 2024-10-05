@@ -2,10 +2,8 @@ using CheckMeInService.Models;
 
 namespace CheckMeInService.Data;
 
-public class CheckInQueries
+public class CheckInQueries : Queries
 {
-    private readonly string _connectionString;
-
     public CheckInQueries(string connectionString)
     {
         _connectionString = connectionString;
