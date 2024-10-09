@@ -2,7 +2,7 @@ using CheckMeInService.Models;
 
 namespace CheckMeInService.Data;
 
-public class SubscriptionQueries : Queries
+public class SubscriptionQueries : Connection 
 {
     public SubscriptionQueries(string connectionString)
     {
@@ -25,6 +25,14 @@ public class SubscriptionQueries : Queries
         using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
         return checkMeInContext.OfferedSubscriptions
             .FirstOrDefault(x => x.SubscriptionName.ToLower() == subscriptionName.ToLower());
+    }
+
+    
+    // Todo: add to integration tests
+    public ActiveSubscriptions? GetActiveSubscriptions(string phoneNumber)
+    {
+        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+        return checkMeInContext.ActiveSubscriptions.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
     }
 
     public bool VerifySubscriberExists(Subscriber subscriber)
@@ -73,6 +81,24 @@ public class SubscriptionQueries : Queries
         var subscriber = checkMeInContext.Subscribers.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
 
         return subscriber;
+    }
+
+    // todo: unit test this
+    public bool RemoveActiveSubscription(ActiveSubscriptions activeSubscriptions)
+    {
+        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+
+        var activeSubscription = checkMeInContext.ActiveSubscriptions.FirstOrDefault(x =>
+            x.ActiveSubscriptionId == activeSubscriptions.ActiveSubscriptionId);
+
+        if (activeSubscription is null)
+        {
+            return false;
+        }
+
+        checkMeInContext.ActiveSubscriptions.Remove(activeSubscription);
+        checkMeInContext.SaveChanges();
+        return true;
     }
 
     public bool RemoveActiveSubscription(Subscriber subscriber, OfferedSubscriptions subscription)

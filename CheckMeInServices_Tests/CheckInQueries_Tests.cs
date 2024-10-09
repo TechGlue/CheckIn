@@ -161,6 +161,17 @@ public class CheckInQueries_Tests : IAsyncLifetime
         Assert.Empty(output);
     }
 
+    [Fact]
+    public void TestMethod_UnmanagedCode()
+    {
+        // This is an example of unmanged code think of an array where you manually have to set up the space in memory
+        int[] array = new int[5];
+        
+        // Vs. managed code where the memory is managed for you. This is a list that is going to dynamically grow with the amount of data you insert into it. 
+        List<int> list = new List<int>();
+    }
+    
+
     public async Task InitializeAsync()
     {
         await _container.StartAsync();

@@ -2,7 +2,7 @@ using CheckMeInService.Models;
 
 namespace CheckMeInService.Data;
 
-public class CheckInQueries : Queries
+public class CheckInQueries : Connection 
 {
     public CheckInQueries(string connectionString)
     {

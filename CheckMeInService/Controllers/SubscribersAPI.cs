@@ -36,7 +36,8 @@ public static class SubscribersAPI
             });
 
         group.MapPost("/AddSubscription",
-            (SubscriptionQueries azureSqlHandler, string firstName, string lastName, string phoneNumber,
+            (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string firstName, string lastName,
+                string phoneNumber,
                 string subscriptionName) =>
             {
                 // Add the subscriber first if it does not exist
@@ -45,39 +46,46 @@ public static class SubscribersAPI
                     FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
                 };
 
-                OfferedSubscriptions? offeredSubscription = azureSqlHandler.GetSubscription(subscriptionName);
+                OfferedSubscriptions? offeredSubscription = subscriptionQueries.GetSubscription(subscriptionName);
 
                 if (offeredSubscription is null)
                 {
                     return Results.BadRequest("Subscription not found");
                 }
 
-                if (!azureSqlHandler.VerifySubscriberExists(newSubscriber))
+                if (!subscriptionQueries.VerifySubscriberExists(newSubscriber))
                 {
                     // We have the subscriber here
-                    azureSqlHandler.AddNewSubscriber(newSubscriber);
+                    subscriptionQueries.AddNewSubscriber(newSubscriber);
 
                     // Now we can add the subscription 
-                    azureSqlHandler.AddNewMemberSubscription(newSubscriber, offeredSubscription);
+                    subscriptionQueries.AddNewMemberSubscription(newSubscriber, offeredSubscription);
 
-                    bool res = azureSqlHandler.AddNewMemberSubscription(newSubscriber, offeredSubscription);
+                    bool res = subscriptionQueries.AddNewMemberSubscription(newSubscriber, offeredSubscription);
+                    bool checkIn =
+                        checkInQueries.CreateNewCheckIn(subscriptionQueries.GetActiveSubscriptions(phoneNumber), 24);
 
                     // return the result for the new subscriber
-                    return res
+                    return res && checkIn
                         ? Results.BadRequest("Subscription failed to add for new subscriber")
                         : Results.Ok("Subscription added successfully for new subscriber");
                 }
 
-                Subscriber? existingSubscriber = azureSqlHandler.FetchExistingSubscriber(phoneNumber);
+                Subscriber? existingSubscriber = subscriptionQueries.FetchExistingSubscriber(phoneNumber);
 
                 if (existingSubscriber is null)
                 {
                     return Results.BadRequest("Subscriber not found");
                 }
 
-                bool response = azureSqlHandler.AddNewMemberSubscription(existingSubscriber, offeredSubscription);
+                bool newMemberResponse =
+                    subscriptionQueries.AddNewMemberSubscription(existingSubscriber, offeredSubscription);
 
-                return response
+                // create a user check-in entry to track  
+                bool newCheckInResponse =
+                    checkInQueries.CreateNewCheckIn(subscriptionQueries.GetActiveSubscriptions(phoneNumber), 24);
+
+                return newMemberResponse && newCheckInResponse
                         ? Results.Ok("Subscription added successfully")
                         : Results.BadRequest("Subscription failed to add due to existing subscription")
                     ;
