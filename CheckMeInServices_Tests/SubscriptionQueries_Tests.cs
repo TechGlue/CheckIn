@@ -238,6 +238,66 @@ public class SubscriptionQueries_Tests : IAsyncLifetime
     }
 
     [Fact]
+    public void GetActiveSubscription_ValidPhoneNumber_ReturnsActiveSubscription()
+    {
+        // Arrange - Act
+        ActiveSubscriptions? activeSubscriptions = _subscriptionQueries.GetActiveSubscriptions("555-555-1111");
+
+        // Assert
+        Assert.NotNull(activeSubscriptions);
+        Assert.Equal("555-555-1111", activeSubscriptions.PhoneNumber);
+    }
+    
+    [Fact]
+    public void GetActiveSubscription_InvalidPhoneNumber_ReturnsNull()
+    {
+        // Arrange - Act
+        ActiveSubscriptions? activeSubscriptions = _subscriptionQueries.GetActiveSubscriptions("NotAPhoneNumber");
+
+        // Assert
+        Assert.Null(activeSubscriptions);
+    }
+    
+    [Fact]
+    public void RemoveActiveSubscription_ActiveSubscription_ReturnsTrue()
+    {
+        // Arrange
+        Subscriber newSubscriber = new Subscriber(Guid.NewGuid(), "TestAddNewSubscriptionFirst",
+            "TestAddNewSubscriptionLast", "333-555-1111");
+        OfferedSubscriptions newSubscription = new OfferedSubscriptions(Guid.NewGuid(), "TestAddNewMemberSubscription");
+        
+        ActiveSubscriptions dummySubscription =
+            new ActiveSubscriptions(Guid.NewGuid(), newSubscriber.SubscriberId, newSubscription.SubscriptionId, DateTime.Now, newSubscriber.PhoneNumber);
+
+        // Act
+        _dbContext.OfferedSubscriptions.Add(newSubscription);
+        _dbContext.Subscribers.Add(newSubscriber);
+        _dbContext.ActiveSubscriptions.Add(dummySubscription);
+        _dbContext.SaveChanges();
+
+        // Act
+        bool output = _subscriptionQueries.RemoveActiveSubscription(dummySubscription);
+
+        // Assert
+        Assert.True(output);
+    }
+
+    [Fact]
+    public void RemoveActiveSubscription_InvalidActiveSubscription_ReturnsFalse()
+    {
+        // Arrange
+        ActiveSubscriptions dummySubscription =
+            new ActiveSubscriptions(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, "NotANumber");
+
+        // Act
+        bool output = _subscriptionQueries.RemoveActiveSubscription(dummySubscription);
+
+        // Assert
+        Assert.False(output);
+    }
+    
+
+    [Fact]
     // Setup DB container
     public async Task InitializeAsync()
     {
@@ -254,8 +314,14 @@ public class SubscriptionQueries_Tests : IAsyncLifetime
 
     private async Task SeedTestDataSubscribers()
     {
+        OfferedSubscriptions offeredSubscriptions = new OfferedSubscriptions(Guid.NewGuid(), "TestContainers");
+        Subscriber activeSubscriber = new Subscriber(Guid.NewGuid(), "TesterFirst", "TesterLast", "555-555-1111");
+        
         _dbContext.Subscribers.Add(new Subscriber(Guid.NewGuid(), "TesterFirst", "TesterLast", "555-555-1111"));
         _dbContext.Subscribers.Add(new Subscriber(Guid.NewGuid(), "SubscriberFirst", "SubscriberLast", "333-555-1111"));
+        _dbContext.OfferedSubscriptions.Add(offeredSubscriptions);
+        _dbContext.ActiveSubscriptions.Add(new ActiveSubscriptions(Guid.NewGuid(), activeSubscriber.SubscriberId,
+            offeredSubscriptions.SubscriptionId, DateTime.Now, "555-555-1111"));
         await _dbContext.SaveChangesAsync();
     }
 
