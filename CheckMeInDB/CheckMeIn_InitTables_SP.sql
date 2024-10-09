@@ -40,6 +40,10 @@ BEGIN
 		CurrentStreak INT NOT NULL,
 	  )
 
+	  -- Load the default OfferedSubscription
+	  INSERT INTO OfferedSubscriptions (SubscriptionName)
+	  VALUES ('Exercise')
+
     END TRY
     BEGIN CATCH
         SELECT

@@ -4,10 +4,10 @@ CREATE PROCEDURE dbo.DropAllTables
 AS
 BEGIN
     BEGIN TRY
-	  DROP TABLE dbo.ActiveSubscriptions;
-	  DROP TABLE dbo.Subscribers;
-	  DROP TABLE dbo.OfferedSubscriptions;
 	  DROP TABLE dbo.CheckIn;
+      DROP TABLE dbo.ActiveSubscriptions;
+	  DROP TABLE dbo.OfferedSubscriptions;
+	  DROP TABLE dbo.Subscribers;
     END TRY
     BEGIN CATCH
         SELECT
