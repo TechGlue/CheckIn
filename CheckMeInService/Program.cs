@@ -1,3 +1,4 @@
+using CheckMeInService.CheckIns;
 using CheckMeInService.Data;
 using CheckMeInService.Models;
 using CheckMeInService.Subscribers;
@@ -11,10 +12,12 @@ builder.Services.AddSingleton<SubscriptionQueries>();
 builder.Services.AddSingleton<CheckInQueries>();
 var app = builder.Build();
 
-app.MapGet("/", () => "CheckMeIn API is running");
-
 app.MapGroup("/api/subscribers")
     .MapSubscribersApi()
     .WithTags("Controllers Api");
+
+app.MapGroup("/api/checkin")
+    .MapCheckInApi()
+    .WithTags("CheckIn");
 
 app.Run();

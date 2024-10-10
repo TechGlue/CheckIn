@@ -149,7 +149,7 @@ public class SubscriptionQueries_Tests : IAsyncLifetime
         _dbContext.SaveChanges();
         bool validSubscription = _subscriptionQueries.AddNewMemberSubscription(newSubscriber, newSubscription);
         ActiveSubscriptions? activeSubscriptions =
-            _dbContext.ActiveSubscriptions.FirstOrDefault(x => x.SubscriberId == newSubscriber.SubscriberId);
+            _dbContext.ActiveSubscriptions.SingleOrDefault(x => x.SubscriberId == newSubscriber.SubscriberId);
 
         // Assert
         Assert.True(validSubscription);

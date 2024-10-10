@@ -37,7 +37,7 @@ public class CheckInQueries : Connection
         using var checkInContext = new CheckMeInContext(_connectionString);
 
         CheckIn? checkIn =
-            checkInContext.CheckIn.FirstOrDefault(
+            checkInContext.CheckIn.SingleOrDefault(
                 x => x != null && x.ActiveSubscriptionId == activeSubscription.ActiveSubscriptionId);
 
         if (checkIn is not null)

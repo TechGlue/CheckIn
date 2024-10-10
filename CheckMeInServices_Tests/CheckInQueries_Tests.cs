@@ -40,7 +40,7 @@ public class CheckInQueries_Tests : IAsyncLifetime
         // Act
         bool output = _checkInQueries.CreateNewCheckIn(activeSubscription, futureReminderHours);
         CheckIn? checkIn =
-            _dbContext.CheckIn.FirstOrDefault(x =>
+            _dbContext.CheckIn.SingleOrDefault(x =>
                 x != null && x.ActiveSubscriptionId == activeSubscription.ActiveSubscriptionId);
 
         // Assert
@@ -99,7 +99,7 @@ public class CheckInQueries_Tests : IAsyncLifetime
 
         // Act 
         bool output = _checkInQueries.RemoveCheckIn(activeSubscription);
-        CheckIn? checkIns = _dbContext.CheckIn.FirstOrDefault(x => x != null && x.CheckInId == newCheckIn.CheckInId);
+        CheckIn? checkIns = _dbContext.CheckIn.SingleOrDefault(x => x != null && x.CheckInId == newCheckIn.CheckInId);
 
         // Assert
         Assert.True(output);

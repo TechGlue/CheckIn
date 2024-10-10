@@ -3,9 +3,9 @@ using CheckMeInService.Models;
 
 namespace CheckMeInService.CheckIns;
 
-public static class CheckInAPI
+public static class CheckInApi
 {
-    public static RouteGroupBuilder MapCheckInAPI(this RouteGroupBuilder group)
+    public static RouteGroupBuilder MapCheckInApi(this RouteGroupBuilder group)
     {
         // Un-Enroll Active Subscription 
         group.MapDelete("/Unenroll", (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string phoneNumber) =>

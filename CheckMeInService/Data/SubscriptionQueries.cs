@@ -24,22 +24,20 @@ public class SubscriptionQueries : Connection
     {
         using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
         return checkMeInContext.OfferedSubscriptions
-            .FirstOrDefault(x => x.SubscriptionName.ToLower() == subscriptionName.ToLower());
+            .SingleOrDefault(x => x.SubscriptionName.ToLower() == subscriptionName.ToLower());
     }
-
     
-    // Todo: add to integration tests
     public ActiveSubscriptions? GetActiveSubscriptions(string phoneNumber)
     {
         using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
-        return checkMeInContext.ActiveSubscriptions.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+        return checkMeInContext.ActiveSubscriptions.SingleOrDefault(x => x.PhoneNumber == phoneNumber);
     }
 
     public bool VerifySubscriberExists(Subscriber subscriber)
     {
         using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
 
-        var checkSubs = checkMeInContext.Subscribers.FirstOrDefault(x => x.PhoneNumber == subscriber.PhoneNumber);
+        var checkSubs = checkMeInContext.Subscribers.SingleOrDefault(x => x.PhoneNumber == subscriber.PhoneNumber);
 
         return checkSubs != null;
     }
@@ -47,7 +45,7 @@ public class SubscriptionQueries : Connection
     public bool CheckForExistingSubscription(Subscriber subscriber, OfferedSubscriptions offeredSubscriptions)
     {
         using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
-        var checkSubscription = checkMeInContext.ActiveSubscriptions.FirstOrDefault(x =>
+        var checkSubscription = checkMeInContext.ActiveSubscriptions.SingleOrDefault(x =>
             x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == offeredSubscriptions.SubscriptionId);
         return checkSubscription != null;
     }
@@ -78,7 +76,7 @@ public class SubscriptionQueries : Connection
     {
         using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
 
-        var subscriber = checkMeInContext.Subscribers.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+        var subscriber = checkMeInContext.Subscribers.SingleOrDefault(x => x.PhoneNumber == phoneNumber);
 
         return subscriber;
     }
@@ -88,7 +86,7 @@ public class SubscriptionQueries : Connection
     {
         using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
 
-        var activeSubscription = checkMeInContext.ActiveSubscriptions.FirstOrDefault(x =>
+        var activeSubscription = checkMeInContext.ActiveSubscriptions.SingleOrDefault(x =>
             x.ActiveSubscriptionId == activeSubscriptions.ActiveSubscriptionId);
 
         if (activeSubscription is null)
@@ -105,7 +103,7 @@ public class SubscriptionQueries : Connection
     {
         using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
 
-        var activeSubscription = checkMeInContext.ActiveSubscriptions.FirstOrDefault(x =>
+        var activeSubscription = checkMeInContext.ActiveSubscriptions.SingleOrDefault(x =>
             x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == subscription.SubscriptionId);
 
         if (activeSubscription is null)
