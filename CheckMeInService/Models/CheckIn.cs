@@ -19,8 +19,8 @@ public class CheckIn
     [Column("FutureCheckInDate")]
     public DateTime FutureCheckInDate { get; set; }
     
-    [Column("CurrentStreak")]
-    public int CurrentStreak { get; set; }
+    [Column("TotalCheckIns")]
+    public int TotalCheckIns { get; set; }
     
     public CheckIn()
     {
@@ -31,6 +31,6 @@ public class CheckIn
         ActiveSubscriptionId = activeSubscriptionId;
         LastCheckInDate = lastCheckInDate;
         FutureCheckInDate = futureCheckInDate;
-        CurrentStreak = currentStreak;
+        TotalCheckIns = currentStreak;
     }
 }
