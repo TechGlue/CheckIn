@@ -18,7 +18,7 @@ public class Subscriber
     public string LastName { get; set; }
     
     [Required]
-    [MaxLength(15)]
+    [MaxLength(128)]
     [Index(IsUnique = true)]
     public string PhoneNumber { get; set; }
     

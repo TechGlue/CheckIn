@@ -2,7 +2,6 @@ using CheckMeInService.CheckIns;
 using CheckMeInService.Data;
 using CheckMeInService.Models;
 using CheckMeInService.Subscribers;
-using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 DatabaseSettings settings = new DatabaseSettings("appsettings.json");
@@ -16,7 +15,7 @@ app.MapGroup("/api/subscribers")
     .MapSubscribersApi()
     .WithTags("Controllers Api");
 
-app.MapGroup("/api/checkin")
+app.MapGroup("/api/checkins")
     .MapCheckInApi()
     .WithTags("CheckIn");
 

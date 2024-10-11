@@ -20,7 +20,7 @@ public class ActiveSubscriptions
     [Required][Column("SubscriptionStartDate")]
     public DateTime SubscriptionStartDate { get; set; }
 
-    [Required][MaxLength(15)]
+    [Required][MaxLength(128)]
     public required string PhoneNumber { get; set; }
     
     public ActiveSubscriptions()
