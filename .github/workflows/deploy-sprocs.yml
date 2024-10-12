@@ -2,6 +2,7 @@ on:
   push:
     paths: 
      - '../../CheckMeInDB/**.sql'
+  workflow_dispatch:
     
 
 jobs:
