@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: set-matrix
-        run: echo "deploymatrix=$(ls /CheckMeInDB/*.sql | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        run: echo "deploymatrix=$(ls ./CheckMeInDB/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
     outputs:
       deploymatrix: ${{ steps.set-matrix.outputs.deploymatrix }}
   
