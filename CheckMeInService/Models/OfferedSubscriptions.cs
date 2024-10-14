@@ -5,13 +5,9 @@ namespace CheckMeInService.Models;
 
 public class OfferedSubscriptions
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [Column("SubscriptionID")]
-    public Guid SubscriptionId { get; set; }
-
-    [Required] [MaxLength(128)] public string SubscriptionName { get; set; }
     public OfferedSubscriptions()
     {
+        SubscriptionId = Guid.NewGuid();
     }
 
     public OfferedSubscriptions(Guid? subscriptionId, string subscriptionName)
@@ -19,4 +15,11 @@ public class OfferedSubscriptions
         SubscriptionId = subscriptionId ?? Guid.NewGuid();
         SubscriptionName = subscriptionName;
     }
+
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("SubscriptionID")]
+    public Guid SubscriptionId { get; set; }
+
+    [Required] [MaxLength(128)] public required string SubscriptionName { get; set; }
 }

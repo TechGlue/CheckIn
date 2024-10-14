@@ -5,27 +5,13 @@ namespace CheckMeInService.Models;
 
 public class CheckIn
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [Column("CheckInID")]
-    public Guid CheckInId { get; set; }
-    
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [Column("ActiveSubscriptionsID")]
-    public Guid ActiveSubscriptionId { get; set; }
-    
-    [Column("LastCheckInDate")]
-    public DateTime LastCheckInDate { get; set; }
-    
-    [Column("FutureCheckInDate")]
-    public DateTime FutureCheckInDate { get; set; }
-    
-    [Column("TotalCheckIns")]
-    public int TotalCheckIns { get; set; }
-    
     public CheckIn()
     {
+        CheckInId = Guid.NewGuid();
     }
-    public CheckIn(Guid? checkInId, Guid activeSubscriptionId, DateTime lastCheckInDate, DateTime futureCheckInDate, int currentStreak)
+
+    public CheckIn(Guid? checkInId, Guid activeSubscriptionId, DateTime lastCheckInDate, DateTime futureCheckInDate,
+        int currentStreak)
     {
         CheckInId = checkInId ?? Guid.NewGuid();
         ActiveSubscriptionId = activeSubscriptionId;
@@ -33,4 +19,19 @@ public class CheckIn
         FutureCheckInDate = futureCheckInDate;
         TotalCheckIns = currentStreak;
     }
+
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("CheckInID")]
+    public Guid CheckInId { get; set; }
+
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("ActiveSubscriptionsID")]
+    public Guid ActiveSubscriptionId { get; set; }
+
+    [Column("LastCheckInDate")] public DateTime LastCheckInDate { get; set; }
+
+    [Column("FutureCheckInDate")] public DateTime FutureCheckInDate { get; set; }
+
+    [Column("TotalCheckIns")] public int TotalCheckIns { get; set; }
 }

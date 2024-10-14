@@ -8,22 +8,22 @@ public class CheckInHistory
     public CheckInHistory(int checkInHistoryId, Guid subscriptionId, Guid subscriberId, DateTime lastCheckInDate,
         string subscriptionName)
     {
-        CheckInHistoryID = checkInHistoryId;
-        SubscriptionID = subscriptionId;
-        SubscriberID = subscriberId;
+        CheckInHistoryId = checkInHistoryId;
+        SubscriptionId = subscriptionId;
+        SubscriberId = subscriberId;
         LastCheckInDate = lastCheckInDate;
         SubscriptionName = subscriptionName;
     }
 
-    [Key] [Column("CheckInHistoryID")] public int CheckInHistoryID { get; set; }
+    [Key] [Column("CheckInHistoryID")] public int CheckInHistoryId { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("SubscriptionID")]
-    public Guid SubscriptionID { get; set; }
+    public Guid SubscriptionId { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("SubscriberID")]
-    public Guid SubscriberID { get; set; }
+    public Guid SubscriberId { get; set; }
 
     [Column("LastCheckInDate")] public DateTime LastCheckInDate { get; set; }
 

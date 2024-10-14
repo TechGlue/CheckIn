@@ -2,16 +2,16 @@ using CheckMeInService.Models;
 
 namespace CheckMeInService.Data;
 
-public class SubscriptionQueries : Connection 
+public class SubscriptionQueries : Connection
 {
     public SubscriptionQueries(string connectionString)
     {
-        _connectionString = connectionString;
+        ConnectionString = connectionString;
     }
 
     public bool AddNewSubscriber(Subscriber newSubscriber)
     {
-        using var subscriberContext = new CheckMeInContext(_connectionString);
+        using var subscriberContext = new CheckMeInContext(ConnectionString);
 
         // Create a new subscriber
         subscriberContext.Subscribers.Add(newSubscriber);
@@ -22,20 +22,20 @@ public class SubscriptionQueries : Connection
 
     public OfferedSubscriptions? GetSubscription(string subscriptionName)
     {
-        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
         return checkMeInContext.OfferedSubscriptions
             .SingleOrDefault(x => x.SubscriptionName.ToLower() == subscriptionName.ToLower());
     }
-    
+
     public ActiveSubscriptions? GetActiveSubscriptions(string phoneNumber)
     {
-        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
         return checkMeInContext.ActiveSubscriptions.SingleOrDefault(x => x.PhoneNumber == phoneNumber);
     }
 
     public bool VerifySubscriberExists(Subscriber subscriber)
     {
-        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
 
         var checkSubs = checkMeInContext.Subscribers.SingleOrDefault(x => x.PhoneNumber == subscriber.PhoneNumber);
 
@@ -44,7 +44,7 @@ public class SubscriptionQueries : Connection
 
     public bool CheckForExistingSubscription(Subscriber subscriber, OfferedSubscriptions offeredSubscriptions)
     {
-        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
         var checkSubscription = checkMeInContext.ActiveSubscriptions.SingleOrDefault(x =>
             x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == offeredSubscriptions.SubscriptionId);
         return checkSubscription != null;
@@ -52,14 +52,12 @@ public class SubscriptionQueries : Connection
 
     public bool AddNewMemberSubscription(Subscriber subscriber, OfferedSubscriptions subscription)
     {
-        if (CheckForExistingSubscription(subscriber, subscription))
-        {
-            return false;
-        }
+        if (CheckForExistingSubscription(subscriber, subscription)) return false;
 
-        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
-        ActiveSubscriptions newSubscription = new ActiveSubscriptions
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
+        var newSubscription = new ActiveSubscriptions
         {
+            ActiveSubscriptionId = Guid.NewGuid(),
             SubscriberId = subscriber.SubscriberId,
             SubscriptionId = subscription.SubscriptionId,
             SubscriptionStartDate = DateTime.Now,
@@ -74,7 +72,7 @@ public class SubscriptionQueries : Connection
 
     public Subscriber? FetchExistingSubscriber(string phoneNumber)
     {
-        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
 
         var subscriber = checkMeInContext.Subscribers.SingleOrDefault(x => x.PhoneNumber == phoneNumber);
 
@@ -84,15 +82,12 @@ public class SubscriptionQueries : Connection
     // todo: unit test this
     public bool RemoveActiveSubscription(ActiveSubscriptions activeSubscriptions)
     {
-        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
 
         var activeSubscription = checkMeInContext.ActiveSubscriptions.SingleOrDefault(x =>
             x.ActiveSubscriptionId == activeSubscriptions.ActiveSubscriptionId);
 
-        if (activeSubscription is null)
-        {
-            return false;
-        }
+        if (activeSubscription is null) return false;
 
         checkMeInContext.ActiveSubscriptions.Remove(activeSubscription);
         checkMeInContext.SaveChanges();
@@ -101,15 +96,12 @@ public class SubscriptionQueries : Connection
 
     public bool RemoveActiveSubscription(Subscriber subscriber, OfferedSubscriptions subscription)
     {
-        using CheckMeInContext checkMeInContext = new CheckMeInContext(_connectionString);
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
 
         var activeSubscription = checkMeInContext.ActiveSubscriptions.SingleOrDefault(x =>
             x.SubscriberId == subscriber.SubscriberId && x.SubscriptionId == subscription.SubscriptionId);
 
-        if (activeSubscription is null)
-        {
-            return false;
-        }
+        if (activeSubscription is null) return false;
 
         checkMeInContext.ActiveSubscriptions.Remove(activeSubscription);
         checkMeInContext.SaveChanges();

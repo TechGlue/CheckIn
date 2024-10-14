@@ -11,24 +11,15 @@ public static class SubscribersAPI
         group.MapDelete("/RemoveSubscription",
             (SubscriptionQueries azureSqlHandler, string phoneNumber, string subscriptionName) =>
             {
-                // Fetch Subscriber
-                Subscriber? subscriber = azureSqlHandler.FetchExistingSubscriber(phoneNumber);
+                var subscriber = azureSqlHandler.FetchExistingSubscriber(phoneNumber);
 
-                if (subscriber is null)
-                {
-                    return Results.BadRequest("Subscriber not found");
-                }
+                if (subscriber is null) return Results.BadRequest("Subscriber not found");
 
-                // Fetch Subscription
-                OfferedSubscriptions? subscription = azureSqlHandler.GetSubscription(subscriptionName);
+                var subscription = azureSqlHandler.GetSubscription(subscriptionName);
 
-                if (subscription is null)
-                {
-                    return Results.BadRequest("Subscription not found");
-                }
+                if (subscription is null) return Results.BadRequest("Subscription not found");
 
-                // Remove Subscription
-                bool response = azureSqlHandler.RemoveActiveSubscription(subscriber, subscription);
+                var response = azureSqlHandler.RemoveActiveSubscription(subscriber, subscription);
 
                 return response
                     ? Results.Ok("Subscription removed successfully")
@@ -41,17 +32,14 @@ public static class SubscribersAPI
                 string subscriptionName) =>
             {
                 // Add the subscriber first if it does not exist
-                Subscriber newSubscriber = new Subscriber
+                var newSubscriber = new Subscriber
                 {
                     FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
                 };
 
-                OfferedSubscriptions? offeredSubscription = subscriptionQueries.GetSubscription(subscriptionName);
+                var offeredSubscription = subscriptionQueries.GetSubscription(subscriptionName);
 
-                if (offeredSubscription is null)
-                {
-                    return Results.BadRequest("Subscription not found");
-                }
+                if (offeredSubscription is null) return Results.BadRequest("Subscription not found");
 
                 if (!subscriptionQueries.VerifySubscriberExists(newSubscriber))
                 {
@@ -61,9 +49,15 @@ public static class SubscribersAPI
                     // Now we can add the subscription 
                     subscriptionQueries.AddNewMemberSubscription(newSubscriber, offeredSubscription);
 
-                    bool res = subscriptionQueries.AddNewMemberSubscription(newSubscriber, offeredSubscription);
-                    bool checkIn =
-                        checkInQueries.CreateNewCheckIn(subscriptionQueries.GetActiveSubscriptions(phoneNumber), 24);
+                    var res = subscriptionQueries.AddNewMemberSubscription(newSubscriber, offeredSubscription);
+
+                    var userSubscription = subscriptionQueries.GetActiveSubscriptions(phoneNumber);
+
+                    if (userSubscription is null) return Results.BadRequest("No active user subscription found.");
+
+                    var checkIn =
+                        checkInQueries.CreateNewCheckIn(
+                            userSubscription, 24);
 
                     // return the result for the new subscriber
                     return res && checkIn
@@ -71,19 +65,20 @@ public static class SubscribersAPI
                         : Results.Ok("Subscription added successfully for new subscriber");
                 }
 
-                Subscriber? existingSubscriber = subscriptionQueries.FetchExistingSubscriber(phoneNumber);
+                var existingSubscriber = subscriptionQueries.FetchExistingSubscriber(phoneNumber);
 
-                if (existingSubscriber is null)
-                {
-                    return Results.BadRequest("Subscriber not found");
-                }
+                if (existingSubscriber is null) return Results.BadRequest("Subscriber not found");
 
-                bool newMemberResponse =
+                var newMemberResponse =
                     subscriptionQueries.AddNewMemberSubscription(existingSubscriber, offeredSubscription);
 
+                var activeSubscription = subscriptionQueries.GetActiveSubscriptions(phoneNumber);
+
+                if (activeSubscription is null) return Results.BadRequest("Active subscription not found");
+
                 // create a user check-in entry to track  
-                bool newCheckInResponse =
-                    checkInQueries.CreateNewCheckIn(subscriptionQueries.GetActiveSubscriptions(phoneNumber), 24);
+                var newCheckInResponse =
+                    checkInQueries.CreateNewCheckIn(activeSubscription, 24);
 
                 return newMemberResponse && newCheckInResponse
                         ? Results.Ok("Subscription added successfully")
