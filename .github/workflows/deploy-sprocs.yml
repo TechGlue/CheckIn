@@ -1,3 +1,4 @@
+## yml is valid but I think I can use CI to push sql sprocs to the db
 on: 
   push:
     paths: 
