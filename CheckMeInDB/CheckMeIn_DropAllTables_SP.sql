@@ -4,6 +4,7 @@ CREATE PROCEDURE dbo.DropAllTables
 AS
 BEGIN
     BEGIN TRY
+	  DROP TABLE dbo.CheckInHistory;
 	  DROP TABLE dbo.CheckIn;
       DROP TABLE dbo.ActiveSubscriptions;
 	  DROP TABLE dbo.OfferedSubscriptions;

@@ -40,6 +40,17 @@ BEGIN
 		TotalCheckIns INT NOT NULL,
 	  )
 
+	  -- Create the CheckIn history table
+	  CREATE TABLE CheckInHistory
+	  (
+		-- Make the checkin id non guid make it an incremental int we don't need to query this table by id
+	  	CheckInHistoryID INT PRIMARY KEY IDENTITY(1,1) NOT NULL, -- start at 1 and increase by 1 
+		SubscriptionID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES OfferedSubscriptions(SubscriptionID) NOT NULL,
+		SubscriberID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Subscribers(SubscriberID) NOT NULL,
+		CheckInDate DATETIME NOT NULL,
+		SubscriptionName NVARCHAR(128) NOT NULL,
+	  )
+
 	  -- Load the default OfferedSubscription
 	  INSERT INTO OfferedSubscriptions (SubscriptionName)
 	  VALUES ('Exercise')
