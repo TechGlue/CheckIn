@@ -8,24 +8,6 @@ public static class SubscribersAPI
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)
     {
-        group.MapDelete("/RemoveSubscription",
-            (SubscriptionQueries azureSqlHandler, string phoneNumber, string subscriptionName) =>
-            {
-                var subscriber = azureSqlHandler.FetchExistingSubscriber(phoneNumber);
-
-                if (subscriber is null) return Results.BadRequest("Subscriber not found");
-
-                var subscription = azureSqlHandler.GetSubscription(subscriptionName);
-
-                if (subscription is null) return Results.BadRequest("Subscription not found");
-
-                var response = azureSqlHandler.RemoveActiveSubscription(subscriber, subscription);
-
-                return response
-                    ? Results.Ok("Subscription removed successfully")
-                    : Results.BadRequest("Failed to remove subscription");
-            });
-
         group.MapPost("/AddSubscription",
             (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string firstName, string lastName,
                 string phoneNumber,

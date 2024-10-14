@@ -13,7 +13,6 @@ public class SubscriptionQueries : Connection
     {
         using var subscriberContext = new CheckMeInContext(ConnectionString);
 
-        // Create a new subscriber
         subscriberContext.Subscribers.Add(newSubscriber);
         subscriberContext.SaveChanges();
 
@@ -79,7 +78,6 @@ public class SubscriptionQueries : Connection
         return subscriber;
     }
 
-    // todo: unit test this
     public bool RemoveActiveSubscription(ActiveSubscriptions activeSubscriptions)
     {
         using var checkMeInContext = new CheckMeInContext(ConnectionString);

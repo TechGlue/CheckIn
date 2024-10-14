@@ -14,7 +14,6 @@ public class CheckInQueries : Connection
     {
         using var checkInContext = new CheckMeInContext(ConnectionString);
 
-        // First handle if the user has already checked in before 
         var checkIn =
             checkInContext.CheckIn.SingleOrDefault(x =>
                 x.ActiveSubscriptionId == activeSubscription.ActiveSubscriptionId);
@@ -35,7 +34,6 @@ public class CheckInQueries : Connection
 
         if (dbChanged is null) return false;
 
-        // check if the changes were applied 
         if (dbChanged.TotalCheckIns != previousTotal) return true;
 
         return false;
@@ -46,7 +44,7 @@ public class CheckInQueries : Connection
         using var checkInContext = new CheckMeInContext(ConnectionString);
 
         if (checkInContext.CheckIn.Any(x =>
-                x != null && x.ActiveSubscriptionId == activeSubscription.ActiveSubscriptionId))
+                x.ActiveSubscriptionId == activeSubscription.ActiveSubscriptionId))
             return false;
 
         var newCheckIn = new CheckIn
@@ -68,7 +66,7 @@ public class CheckInQueries : Connection
 
         var checkIn =
             checkInContext.CheckIn.SingleOrDefault(
-                x => x != null && x.ActiveSubscriptionId == activeSubscription.ActiveSubscriptionId);
+                x => x.ActiveSubscriptionId == activeSubscription.ActiveSubscriptionId);
 
         if (checkIn is not null)
         {
