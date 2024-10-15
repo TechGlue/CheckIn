@@ -9,6 +9,18 @@ public class CheckInQueries : Connection
         ConnectionString = connectionString;
     }
 
+    public void CreateCheckInHistoryEntry(ActiveSubscriptions activeSubscriptions, CheckIn checkIn,
+        string subscriptionName)
+    {
+        using var checkInContext = new CheckMeInContext(ConnectionString);
+
+        var newCheckInHistory = new CheckInHistory(activeSubscriptions.SubscriptionId, activeSubscriptions.SubscriberId,
+            checkIn.LastCheckInDate, subscriptionName);
+
+        checkInContext.CheckInHistory.Add(newCheckInHistory);
+        checkInContext.SaveChanges();
+    }
+
     // Needs re-work, had to do a last-minute check inside the method to be able to test thoroughly. Due to different contexts with testcontainers;
     public bool LogCheckIn(ActiveSubscriptions activeSubscription)
     {
@@ -25,6 +37,8 @@ public class CheckInQueries : Connection
         // verify that the checkIn Date is above the future reminder hours
         if (checkIn.LastCheckInDate < checkIn.FutureCheckInDate) return false;
 
+        checkIn.LastCheckInDate = DateTime.Now;
+        checkIn.FutureCheckInDate = checkIn.LastCheckInDate.AddHours(24);
         checkIn.TotalCheckIns += 1; // Update the entity
         checkInContext.Update(checkIn);
         checkInContext.SaveChanges();
@@ -82,5 +96,14 @@ public class CheckInQueries : Connection
     {
         using var checkInContext = new CheckMeInContext(ConnectionString);
         return checkInContext.CheckIn.Select(x => x).ToList();
+    }
+
+    public CheckIn GetCheckIn(Guid activeSubscriptionId)
+    {
+        using var checkInContext = new CheckMeInContext(ConnectionString);
+        var checkin = checkInContext.CheckIn.SingleOrDefault(x => x.ActiveSubscriptionId == activeSubscriptionId) ??
+                      new CheckIn();
+
+        return checkin;
     }
 }

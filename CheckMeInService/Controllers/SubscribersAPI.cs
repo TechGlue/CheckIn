@@ -3,8 +3,7 @@ using CheckMeInService.Models;
 
 namespace CheckMeInService.Subscribers;
 
-// Controller responsible for managing the subscribers and their initials subscriptions
-public static class SubscribersAPI
+public static class SubscribersApi
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)
     {
@@ -25,10 +24,8 @@ public static class SubscribersAPI
 
                 if (!subscriptionQueries.VerifySubscriberExists(newSubscriber))
                 {
-                    // We have the subscriber here
                     subscriptionQueries.AddNewSubscriber(newSubscriber);
 
-                    // Now we can add the subscription 
                     subscriptionQueries.AddNewMemberSubscription(newSubscriber, offeredSubscription);
 
                     var res = subscriptionQueries.AddNewMemberSubscription(newSubscriber, offeredSubscription);
@@ -41,7 +38,6 @@ public static class SubscribersAPI
                         checkInQueries.CreateNewCheckIn(
                             userSubscription, 24);
 
-                    // return the result for the new subscriber
                     return res && checkIn
                         ? Results.BadRequest("Subscription failed to add for new subscriber")
                         : Results.Ok("Subscription added successfully for new subscriber");

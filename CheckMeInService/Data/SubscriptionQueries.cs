@@ -105,4 +105,14 @@ public class SubscriptionQueries : Connection
         checkMeInContext.SaveChanges();
         return true;
     }
+
+    public string GetOfferedSubscription(Guid offeredSubscriptionId)
+    {
+        using var checkMeInContext = new CheckMeInContext(ConnectionString);
+
+        var offeredSubscription = checkMeInContext.OfferedSubscriptions.SingleOrDefault(x =>
+            x.SubscriptionId == offeredSubscriptionId);
+
+        return offeredSubscription?.SubscriptionName ?? string.Empty;
+    }
 }

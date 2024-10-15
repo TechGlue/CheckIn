@@ -34,6 +34,42 @@ public class CheckInQueriesTests : IAsyncLifetime
         return _container.DisposeAsync().AsTask();
     }
 
+    private async Task SeedTestData()
+    {
+        var offeredSubscriptions = new OfferedSubscriptions
+        {
+            SubscriptionName = "TestContainers"
+        };
+        var activeSubscriber = new Subscriber
+        {
+            FirstName = "TesterFirst",
+            LastName = "TesterLast",
+            PhoneNumber = "555-555-1111"
+        };
+        var subscriberOne = new Subscriber
+        {
+            FirstName = "TesterFirst",
+            LastName = "TesterLast",
+            PhoneNumber = "555-555-1111"
+        };
+        var subscriberTwo = new Subscriber
+        {
+            FirstName = "SubscriberFirst",
+            LastName = "SubscriberLast",
+            PhoneNumber = "333-555-1111"
+        };
+
+        _dbContext.Subscribers.Add(subscriberOne);
+        _dbContext.Subscribers.Add(subscriberTwo);
+        _dbContext.OfferedSubscriptions.Add(offeredSubscriptions);
+        _dbContext.ActiveSubscriptions.Add(new ActiveSubscriptions(Guid.NewGuid(), activeSubscriber.SubscriberId,
+            offeredSubscriptions.SubscriptionId, DateTime.Now, "555-555-1111")
+        {
+            PhoneNumber = "555-555-1111"
+        });
+        await _dbContext.SaveChangesAsync();
+    }
+
     [Fact]
     public void LogCheckIn_CheckInEarly_ReturnsFalse()
     {
@@ -289,6 +325,47 @@ public class CheckInQueriesTests : IAsyncLifetime
         // Assert
         Assert.Equal(3, output.Count);
         Assert.NotNull(output);
+    }
+
+    [Fact]
+    public void CreateCheckInHistoryEntry_GivenActiveSubscriptionAndCheckIn_CheckInCreated()
+    {
+        // Arrange 
+        var newSubscriber =
+            new Subscriber
+            {
+                FirstName = "RemoveCheckInFirst",
+                LastName = "RemoveCheckInLast",
+                PhoneNumber = "333-333-3333"
+            };
+        var newSubscription =
+            new OfferedSubscriptions
+            {
+                SubscriptionName = "RemoveCheckIn"
+            };
+
+        var activeSubscription = new ActiveSubscriptions(Guid.NewGuid(), newSubscriber.SubscriberId,
+            newSubscription.SubscriptionId, DateTime.Now, newSubscriber.PhoneNumber)
+        {
+            PhoneNumber = newSubscriber.PhoneNumber
+        };
+
+        var newCheckIn = new CheckIn(Guid.NewGuid(), activeSubscription.ActiveSubscriptionId, DateTime.Now,
+            DateTime.Now, 0);
+
+        _dbContext.Subscribers.Add(newSubscriber);
+        _dbContext.OfferedSubscriptions.Add(newSubscription);
+        _dbContext.ActiveSubscriptions.Add(activeSubscription);
+        _dbContext.CheckIn.Add(newCheckIn);
+
+        // Act 
+        _checkInQueries.CreateCheckInHistoryEntry(activeSubscription, newCheckIn, newSubscription.SubscriptionName);
+
+        var checkInHistory =
+            _dbContext.CheckInHistory.SingleOrDefault(x => x.SubscriptionId == activeSubscription.SubscriptionId);
+
+        // Assert
+        Assert.NotNull(checkInHistory);
     }
 
     [Fact]

@@ -5,10 +5,9 @@ namespace CheckMeInService.Models;
 
 public class CheckInHistory
 {
-    public CheckInHistory(int checkInHistoryId, Guid subscriptionId, Guid subscriberId, DateTime lastCheckInDate,
+    public CheckInHistory(Guid subscriptionId, Guid subscriberId, DateTime lastCheckInDate,
         string subscriptionName)
     {
-        CheckInHistoryId = checkInHistoryId;
         SubscriptionId = subscriptionId;
         SubscriberId = subscriberId;
         LastCheckInDate = lastCheckInDate;
@@ -25,7 +24,7 @@ public class CheckInHistory
     [Column("SubscriberID")]
     public Guid SubscriberId { get; set; }
 
-    [Column("LastCheckInDate")] public DateTime LastCheckInDate { get; set; }
+    [Column("CheckInDate")] public DateTime LastCheckInDate { get; set; }
 
     [Column("SubscriptionName")] public string SubscriptionName { get; set; }
 }
