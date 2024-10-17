@@ -27,9 +27,9 @@ jobs:
           files: CheckMeInService/appsettings.json
         env:
           AzureSQL.DataSource: ${{ secrets.DATASOURCE }}
-          AzureSQL.UserId: ${{ secrets.UserId }}
-          AzureSQL.Password: ${{ secrets.Password }}
-          AzureSQL.InitialCatalog: ${{ secrets.InitialCatalog }}
+          AzureSQL.UserId: ${{ secrets.USERID }}
+          AzureSQL.Password: ${{ secrets.USER_PASSWORD }}
+          AzureSQL.InitialCatalog: ${{ secrets.INITIALCATALOG }}
       ## ----------------------------------------
       - name: Build with dotnet
         run: dotnet build --configuration Release
