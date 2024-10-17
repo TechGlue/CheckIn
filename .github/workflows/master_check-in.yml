@@ -21,15 +21,16 @@ jobs:
         with:
           dotnet-version: '8.x'
       
-      ## propagate db login 
-      - uses: microsoft/variable-substitution@v1 
+      ## ------ propagate db login ---------------
+      - uses: microsoft/variable-substitution@v1
         with:
-          files: 'CheckMeInService/*.json'
+          files: CheckMeInService/appsettings.json
         env:
-          Var1: "AzureSQL"
-          Var2.key1: "DataSource"
-          SECRET: ${{ secrets.DATASOURCE }}
-
+          AzureSQL.DataSource: ${{ secrets.DATASOURCE }}
+          AzureSQL.UserId: ${{ secrets.UserId }}
+          AzureSQL.Password: ${{ secrets.Password }}
+          AzureSQL.InitialCatalog: ${{ secrets.InitialCatalog }}
+      ## ----------------------------------------
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
