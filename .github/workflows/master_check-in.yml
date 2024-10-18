@@ -15,9 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      ## todo build and deploy only the API no tests
-
+      
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
