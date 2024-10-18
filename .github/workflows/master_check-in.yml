@@ -16,6 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      ## todo build and deploy only the API no tests
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
@@ -31,17 +33,19 @@ jobs:
           AzureSQL.Password: ${{ secrets.USER_PASSWORD }}
           AzureSQL.InitialCatalog: ${{ secrets.INITIALCATALOG }}
       ## ----------------------------------------
+
+      ## Build the API
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build CheckMeInService/CheckMeInService.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/CheckInAPI
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/CheckInAPI
 
   deploy:
     runs-on: ubuntu-latest
