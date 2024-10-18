@@ -7,6 +7,10 @@ public static class CheckInApi
 {
     public static RouteGroupBuilder MapCheckInApi(this RouteGroupBuilder group)
     {
+        // Todo: remove me
+        group.MapDelete("/Test",
+            () => Results.Ok("API is working"));
+
         // Un-Enroll Active Subscription 
         group.MapDelete("/Unenroll",
             (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string phoneNumber) =>
