@@ -23,7 +23,7 @@ public class DatabaseSettings
         InitialCatalog = config.GetSection("AzureSql:InitialCatalog").Value;
     }
     
-    public string GetConnectionString()
+    public string GetConnection()
     {
         var builder = new SqlConnectionStringBuilder
         {
@@ -34,5 +34,19 @@ public class DatabaseSettings
         };
 
         return builder.ConnectionString;
+    }
+    
+    public bool TestConnection()
+    {
+        using var connection = new SqlConnection(GetConnection());
+        try
+        {
+            connection.Open();
+            return true;
+        }
+        catch (SqlException)
+        {
+            return false;
+        }
     }
 }
