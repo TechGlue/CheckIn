@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - CheckMeInService
+name: Deploy CheckMeIn Service API
 
 on:
   push:
@@ -20,18 +20,29 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-
+          
+      ## ------ propagate db login ---------------
+      - uses: microsoft/variable-substitution@v1
+        with:
+          files: CheckMeInService/appsettings.json
+        env:
+          AzureSQL.DataSource: ${{ secrets.DATASOURCE }}
+          AzureSQL.UserId: ${{ secrets.USERID }}
+          AzureSQL.Password: ${{ secrets.USER_PASSWORD }}
+          AzureSQL.InitialCatalog: ${{ secrets.INITIALCATALOG }}
+      ## ----------------------------------------
+          
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build CheckMeInService/CheckMeInService.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/CheckInAPI
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/CheckInAPI
 
   deploy:
     runs-on: ubuntu-latest
