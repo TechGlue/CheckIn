@@ -41,7 +41,8 @@ public class DatabaseSettings
         using var connection = new SqlConnection(GetConnection());
         try
         {
-            connection.Open();
+            // open the connection but specify the time to wait before terminating the attempt to connect
+            connection.OpenAsync().Wait(5000);
             return true;
         }
         catch (SqlException)

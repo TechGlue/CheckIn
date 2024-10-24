@@ -26,12 +26,14 @@ app.MapGet("/", () => "CheckMeIn API is running").RequireAuthorization();
 app.MapGroup("/api/subscribers")
     .MapSubscribersApi()
     .RequireAuthorization()
+    .RequireScope("Subscribers")
     .WithTags("Subscribers");
     
 
 app.MapGroup("/api/checkins")
     .MapCheckInApi()
     .RequireAuthorization()
+    .RequireScope("CheckIns")
     .WithTags("CheckIn");
 
 app.Run();
