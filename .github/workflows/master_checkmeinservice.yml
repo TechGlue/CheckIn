@@ -1,5 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
 name: Deploy CheckMeIn Service API
 
 on:
@@ -34,11 +32,14 @@ jobs:
         with:
           dotnet-version: '8.x'
           
-      ## ------ propagate db login ---------------
+      ## ------ propagate app settings -----------
       - uses: microsoft/variable-substitution@v1
         with:
           files: CheckMeInService/appsettings.json
         env:
+          Entra.Instance: ${{ secrets.INSTANCE }}
+          Entra.ClientId: ${{ secrets.CLIENTID }}
+          Entra.TenantId: ${{ secrets.TENANTID }}
           AzureSQL.DataSource: ${{ secrets.DATASOURCE }}
           AzureSQL.UserId: ${{ secrets.USERID }}
           AzureSQL.Password: ${{ secrets.USER_PASSWORD }}
