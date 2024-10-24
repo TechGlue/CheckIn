@@ -21,8 +21,8 @@ public class SubscriptionQueriesTests : IAsyncLifetime
     }
 
 
-    [Fact]
     // Setup DB container
+    [Fact]
     public async Task InitializeAsync()
     {
         await _container.StartAsync();

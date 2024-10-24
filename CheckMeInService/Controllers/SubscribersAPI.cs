@@ -67,7 +67,6 @@ public static class SubscribersApi
                     ;
             });
 
-
         return group;
     }
 }
