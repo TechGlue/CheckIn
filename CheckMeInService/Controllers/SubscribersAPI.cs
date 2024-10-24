@@ -7,6 +7,7 @@ public static class SubscribersApi
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)
     {
+        // todo: refactor
         group.MapPost("/AddSubscription",
             (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string firstName, string lastName,
                 string phoneNumber,
@@ -63,6 +64,7 @@ public static class SubscribersApi
                         : Results.BadRequest("Subscription failed to add due to existing subscription")
                     ;
             });
+
 
         return group;
     }
