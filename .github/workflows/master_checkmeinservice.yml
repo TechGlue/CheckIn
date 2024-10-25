@@ -1,4 +1,4 @@
-name: Deploy CheckMeIn Service API
+name: CheckMeIn CI/CD
 
 on:
   push:
