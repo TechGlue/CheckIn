@@ -7,6 +7,9 @@ public static class SubscribersApi
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)
     {
+        group.MapGet("/Test",
+            () => Results.Ok("API is working"));
+        // todo: refactor
         group.MapPost("/AddSubscription",
             (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string firstName, string lastName,
                 string phoneNumber,

@@ -7,7 +7,6 @@ public static class CheckInApi
 {
     public static RouteGroupBuilder MapCheckInApi(this RouteGroupBuilder group)
     {
-        // Todo: remove me
         group.MapGet("/Test",
             () => Results.Ok("API is working"));
 
