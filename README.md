@@ -1,6 +1,6 @@
 [![CheckMeInService](https://github.com/TechGlue/CheckIn/actions/workflows/master_checkmeinservice.yml/badge.svg)](https://github.com/TechGlue/CheckIn/actions/workflows/master_checkmeinservice.yml)
 # Welcome to the CheckIn Service API 🎉
-**Hey there!** Welcome to the CheckIn API! This project serves as a sandbox for sharpening my skills with ASP.NET Core and new language features and technologies while solving a personal problem: tracking and counting consistency in habit-building.
+**Hey there!** Welcome to the CheckIn API! This personal project serves as a sandbox for sharpening my skills with ASP.NET Core and new language features and technologies while solving a personal problem: tracking and counting consistency in habit-building.
 
 ## What's under the hood?
 This app is built using: 
