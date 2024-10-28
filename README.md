@@ -18,6 +18,13 @@ This app is built using:
 -   [.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 ### Installation Steps :wrench:
+Now fire up your terminal and run:
+
+```sh
+$ git clone https://github.com/TechGlue/CheckIn.git
+$ cd CheckIn
+$ cd CheckMeInService
+```
 
 **Setting up infrastructure**  
 - Launch Azure
@@ -29,11 +36,8 @@ This app is built using:
 - Fill in the EntraId and AzureSQL login fields in the appsettings.json
 - Support with [EntraId config files](https://learn.microsoft.com/en-us/entra/identity-platform/scenario-web-app-sign-user-app-configuration?tabs=aspnetcore#configuration-files)
 
-Now fire up your terminal and run:
+**Running the API**
 ```sh
-$ git clone https://github.com/TechGlue/CheckIn.git
-$ cd CheckIn
-$ cd CheckMeInService
 $ dotnet restore 
 $ dotnet run
 ```
