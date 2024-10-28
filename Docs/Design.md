@@ -1,4 +1,4 @@
 # CheckMeIn - Design
 
-## Database Schemas and relationships
+## Database schemas and relationships
 ![Schemas](db-schemas.png)
