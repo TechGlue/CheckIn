@@ -47,5 +47,5 @@ Query the database using an API testing tool. I prefer Postman, as it is the mos
 **Future work**: building up a development container with a local database. 
 
 ## Misc.
-[Design and architecture diagrams]()
+[Design and architecture](Docs/Design.md)
 
