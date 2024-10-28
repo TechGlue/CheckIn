@@ -44,7 +44,24 @@ $ dotnet run
 
 Query the database using an API testing tool. I prefer Postman, as it is the most straightforward for fetching the OAuth2 bearer token and authorizing access to the API. [Here's](https://youtu.be/cUcn1gm_f-8?t=899) a tutorial that I found helpful for getting started with Postman and EntraId
 
-**Future work**: building up a development container with a local database. 
+### Routes
+**/api/checkins/**
+- **Unenroll** (Removes user given a phone number/email from the checkins table)<br/>
+**Parameters:**
+  - phoneNumber
+- **LogDaily** (Creates a new checkin entry given a phone number/email.)<br/>
+**Parameters:**
+  - phoneNumber
+
+**/api/subscribers**
+- **AddSubscription** (Creates a new user and registers user.)<br/>
+**Parameters:**
+  - firstName
+  - lastName
+  - phoneNumber
+  - subscriptionName
+
+**Future work**: building up a development container with a local database and swwagger setup. 
 
 ## Misc.
 [Design and architecture](Docs/Design.md)
