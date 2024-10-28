@@ -27,7 +27,7 @@ This app is built using:
 - Run **CheckMeIn_InitTables_SP_01.sql** in the new DB instance
 - Execute the stored procedure "Exec dbo.InitTables"
 - Fill in the EntraId and AzureSQL login fields in the appsettings.json
-- Links: support with [EntraId config files](https://learn.microsoft.com/en-us/entra/identity-platform/scenario-web-app-sign-user-app-configuration?tabs=aspnetcore#configuration-files)
+- Support with [EntraId config files](https://learn.microsoft.com/en-us/entra/identity-platform/scenario-web-app-sign-user-app-configuration?tabs=aspnetcore#configuration-files)
 
 Now fire up your terminal and run:
 ```sh
