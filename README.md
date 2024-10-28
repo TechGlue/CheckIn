@@ -61,7 +61,7 @@ Query the database using an API testing tool. I prefer Postman, as it is the mos
   - phoneNumber
   - subscriptionName
 
-**Future work**: building up a development container with a local database and swwagger setup. 
+**Future work**: building up a development container with a local database and swagger setup. 
 
 ## Misc.
 [Design and architecture](Docs/Design.md)
