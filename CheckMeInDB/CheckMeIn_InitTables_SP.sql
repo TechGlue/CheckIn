@@ -27,7 +27,7 @@ BEGIN
 	  	SubscriberID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Subscribers(SubscriberID) NOT NULL,
 	  	SubscriptionID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES OfferedSubscriptions(SubscriptionID) NOT NULL,
 	  	SubscriptionStartDate DATETIME NOT NULL,
-	  	PhoneNumber NVARCHAR(128) NOT NULL UNIQUE,
+	  	PhoneNumber NVARCHAR(128),
 	  )
 
 	  -- Create the CheckIn table
