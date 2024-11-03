@@ -12,10 +12,10 @@ public static class CheckInApi
 
         // Un-Enroll Active Subscription 
         group.MapDelete("/Unenroll",
-            (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string phoneNumber) =>
+            (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string phoneNumber, string subscriptionName) =>
             {
                 // First identify the active subscription 
-                var activeSubscriptions = subscriptionQueries.GetActiveSubscriptions(phoneNumber);
+                var activeSubscriptions = subscriptionQueries.GetActiveSubscriptions(phoneNumber, subscriptionName);
 
                 if (activeSubscriptions is null)
                     return Results.BadRequest($"Subscription not found for user with phone number: {phoneNumber}");
@@ -32,13 +32,13 @@ public static class CheckInApi
             });
 
         group.MapPut("/LogDaily",
-            (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string phoneNumber) =>
+            (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string phoneNumber, string subscriptionName) =>
             {
                 // First identify the active subscription 
-                var activeSubscriptions = subscriptionQueries.GetActiveSubscriptions(phoneNumber);
+                var activeSubscriptions = subscriptionQueries.GetActiveSubscriptions(phoneNumber, subscriptionName);
 
                 if (activeSubscriptions is null)
-                    return Results.BadRequest($"Subscription not found for user with phone number: {phoneNumber}");
+                    return Results.BadRequest($"Subscription not found for: {phoneNumber}");
 
                 // Create Check-in and make an entry in the history table
                 var result = checkInQueries.LogCheckIn(activeSubscriptions);
@@ -47,6 +47,7 @@ public static class CheckInApi
                 var checkIn = checkInQueries.GetCheckIn(activeSubscriptions.ActiveSubscriptionId);
                 var offeredSubscription =
                     subscriptionQueries.GetOfferedSubscription(activeSubscriptions.SubscriptionId);
+                
                 checkInQueries.CreateCheckInHistoryEntry(activeSubscriptions, checkIn, offeredSubscription);
 
                 if (checkIn == new CheckIn())

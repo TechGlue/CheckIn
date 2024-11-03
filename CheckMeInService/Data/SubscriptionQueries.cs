@@ -26,10 +26,21 @@ public class SubscriptionQueries : Connection
             .SingleOrDefault(x => x.SubscriptionName.ToLower() == subscriptionName.ToLower());
     }
 
-    public ActiveSubscriptions? GetActiveSubscriptions(string phoneNumber)
+    public ActiveSubscriptions? GetActiveSubscriptions(string phoneNumber, string subscriptionName )
     {
+        // Need to get the active subscription for the user that was asked of 
         using var checkMeInContext = new CheckMeInContext(ConnectionString);
-        return checkMeInContext.ActiveSubscriptions.SingleOrDefault(x => x.PhoneNumber == phoneNumber);
+        
+        // fetch the offered subscriptions
+        var currentSubscription =
+            checkMeInContext.OfferedSubscriptions.SingleOrDefault(x =>  x.SubscriptionName == subscriptionName);
+
+        if (currentSubscription is null)
+        {
+            return null;
+        }
+        
+        return checkMeInContext.ActiveSubscriptions.SingleOrDefault(x => x.PhoneNumber == phoneNumber && x.SubscriptionId == currentSubscription.SubscriptionId);
     }
 
     public bool VerifySubscriberExists(Subscriber subscriber)

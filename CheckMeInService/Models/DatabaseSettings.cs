@@ -30,13 +30,17 @@ public class DatabaseSettings
             DataSource = DataSource,
             UserID = UserId,
             Password = Password,
-            InitialCatalog = InitialCatalog
+            InitialCatalog = InitialCatalog,
+// Only trust server cert in debug mode 
+#if DEBUG
+            TrustServerCertificate = true
+#endif
         };
 
         return builder.ConnectionString;
     }
 
-    public bool TestConnection()
+    public bool TestDatabaseConnection()
     {
         using var connection = new SqlConnection(GetConnection());
         try

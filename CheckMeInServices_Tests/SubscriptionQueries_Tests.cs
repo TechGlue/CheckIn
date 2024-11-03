@@ -20,7 +20,6 @@ public class SubscriptionQueriesTests : IAsyncLifetime
             .Build();
     }
 
-
     // Setup DB container
     [Fact]
     public async Task InitializeAsync()
@@ -332,7 +331,7 @@ public class SubscriptionQueriesTests : IAsyncLifetime
     public void GetActiveSubscription_ValidPhoneNumber_ReturnsActiveSubscription()
     {
         // Arrange - Act
-        var activeSubscriptions = _subscriptionQueries.GetActiveSubscriptions("555-555-1111");
+        var activeSubscriptions = _subscriptionQueries.GetActiveSubscriptions("555-555-1111", "TestContainers");
 
         // Assert
         Assert.NotNull(activeSubscriptions);
@@ -343,7 +342,7 @@ public class SubscriptionQueriesTests : IAsyncLifetime
     public void GetActiveSubscription_InvalidPhoneNumber_ReturnsNull()
     {
         // Arrange - Act
-        var activeSubscriptions = _subscriptionQueries.GetActiveSubscriptions("NotAPhoneNumber");
+        var activeSubscriptions = _subscriptionQueries.GetActiveSubscriptions("NotAPhoneNumber", "Not a subscription");
 
         // Assert
         Assert.Null(activeSubscriptions);
