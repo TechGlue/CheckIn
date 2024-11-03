@@ -331,7 +331,7 @@ public class SubscriptionQueriesTests : IAsyncLifetime
     public void GetActiveSubscription_ValidPhoneNumber_ReturnsActiveSubscription()
     {
         // Arrange - Act
-        var activeSubscriptions = _subscriptionQueries.GetActiveSubscriptions("555-555-1111", "Exercise");
+        var activeSubscriptions = _subscriptionQueries.GetActiveSubscriptions("555-555-1111", "TestContainers");
 
         // Assert
         Assert.NotNull(activeSubscriptions);
