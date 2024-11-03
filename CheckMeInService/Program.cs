@@ -17,7 +17,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-if (settings.TestConnection() is false) throw new Exception("Unable to connect to the database");
+if (settings.TestDatabaseConnection() is false) throw new Exception("Unable to connect to the database");
 
 app.UseAuthorization();
 
