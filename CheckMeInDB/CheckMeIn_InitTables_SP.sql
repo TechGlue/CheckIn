@@ -17,7 +17,7 @@ BEGIN
 	  CREATE TABLE OfferedSubscriptions
 	  (
 	  	SubscriptionID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID() NOT NULL,
-	  	SubscriptionName NVARCHAR(128) NOT NULL
+	  	SubscriptionName NVARCHAR(128) NOT NULL UNIQUE
 	  )
 	  
 	  -- Create the ActiveSubscriptions tables
