@@ -9,13 +9,12 @@ public static class SubscribersApi
     {
         group.MapGet("/Test",
             () => Results.Ok("API is working"));
-        // todo: refactor
+        
         group.MapPost("/AddSubscription",
             (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string firstName, string lastName,
                 string phoneNumber,
                 string subscriptionName) =>
             {
-                // Add the subscriber first if it does not exist
                 var newSubscriber = new Subscriber
                 {
                     FirstName = firstName, LastName = lastName, PhoneNumber = phoneNumber
@@ -33,7 +32,7 @@ public static class SubscribersApi
 
                     var res = subscriptionQueries.AddNewMemberSubscription(newSubscriber, offeredSubscription);
 
-                    var userSubscription = subscriptionQueries.GetActiveSubscriptions(phoneNumber);
+                    var userSubscription = subscriptionQueries.GetActiveSubscriptions(phoneNumber, subscriptionName);
 
                     if (userSubscription is null) return Results.BadRequest("No active user subscription found.");
 
@@ -53,7 +52,7 @@ public static class SubscribersApi
                 var newMemberResponse =
                     subscriptionQueries.AddNewMemberSubscription(existingSubscriber, offeredSubscription);
 
-                var activeSubscription = subscriptionQueries.GetActiveSubscriptions(phoneNumber);
+                var activeSubscription = subscriptionQueries.GetActiveSubscriptions(phoneNumber, subscriptionName);
 
                 if (activeSubscription is null) return Results.BadRequest("Active subscription not found");
 

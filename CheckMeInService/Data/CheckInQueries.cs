@@ -15,7 +15,7 @@ public class CheckInQueries : Connection
         using var checkInContext = new CheckMeInContext(ConnectionString);
 
         var newCheckInHistory = new CheckInHistory(activeSubscriptions.SubscriptionId, activeSubscriptions.SubscriberId,
-            checkIn.LastCheckInDate, subscriptionName);
+            checkIn.LastCheckInDate, subscriptionName.ToLower());
 
         checkInContext.CheckInHistory.Add(newCheckInHistory);
         checkInContext.SaveChanges();
