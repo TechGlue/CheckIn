@@ -34,10 +34,13 @@ public class CheckInQueries : Connection
 
         var previousTotal = checkIn.TotalCheckIns;
 
-        // verify that the checkIn Date is above the future reminder hours
-        if (checkIn.LastCheckInDate < checkIn.FutureCheckInDate) return false;
+        
+        // get current Time and compare with the future reminder hours
+        var currentTime = DateTime.Now;
+        
+        if ( currentTime < checkIn.FutureCheckInDate) return false;
 
-        checkIn.LastCheckInDate = DateTime.Now;
+        checkIn.LastCheckInDate = currentTime;
         checkIn.FutureCheckInDate = checkIn.LastCheckInDate.AddHours(24);
         checkIn.TotalCheckIns += 1; // Update the entity
         checkInContext.Update(checkIn);
