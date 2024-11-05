@@ -19,7 +19,6 @@ public class CheckInQueriesTests : IAsyncLifetime
             .Build();
     }
 
-
     public async Task InitializeAsync()
     {
         await _container.StartAsync();
@@ -27,6 +26,7 @@ public class CheckInQueriesTests : IAsyncLifetime
         _checkInQueries = new CheckInQueries(_container.GetConnectionString());
 
         await _dbContext.Database.EnsureCreatedAsync();
+        await SeedTestData(); 
     }
 
     public Task DisposeAsync()
@@ -130,8 +130,8 @@ public class CheckInQueriesTests : IAsyncLifetime
         var newCheckIn = new CheckIn
         {
             ActiveSubscriptionId = activeSubscription.ActiveSubscriptionId,
-            LastCheckInDate = DateTime.Now.AddHours(25),
-            FutureCheckInDate = DateTime.Now.AddHours(24),
+            LastCheckInDate = DateTime.Now.AddHours(-2),
+            FutureCheckInDate = DateTime.Now.AddHours(-1),
             TotalCheckIns = 0
         };
 

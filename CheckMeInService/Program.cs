@@ -28,7 +28,6 @@ app.MapGroup("/api/subscribers")
     .RequireAuthorization()
     .RequireScope("Subscribers")
     .WithTags("Subscribers");
-    
 
 app.MapGroup("/api/checkins")
     .MapCheckInApi()
