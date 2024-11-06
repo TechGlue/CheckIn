@@ -63,3 +63,5 @@ BEGIN
     END CATCH
 END;
 GO 
+
+EXEC dbo.InitTables
