@@ -1,13 +1,17 @@
 # Fetch latest image for Azure SQL
-FROM mcr.microsoft.com/azure-sql-edge
+FROM mcr.microsoft.com/azure-sql-edge:latest
 
 # Set environment variables
-ENV ACCEPT_EULA=1
-ENV MSSQL_SA_PASSWORD=StrongPassword!123
-ENV MSSQL_PID=Developer
+ENV MSSQL_SA_PASSWORD="StrongPassword!123"
+ENV ACCEPT_EULA="Y"
+ENV MSSQL_PID="Developer"
 
-# Expose the SQL Server port
+# Expose port 1433 for SQL Server
 EXPOSE 1433
 
-# Copy the script to initialize the database
-COPY ./CheckMeInDB/CheckMeIn_InitTables_SP.sql /app/CheckMeIn_InitTables_SP.sql
+# copy the stored procedure file to the container
+COPY ./create-temp-db.sh /usr/src/app/create-temp-db.sh
+COPY ./CheckMeIn_InitTables_SP.sql /usr/src/app/CheckMeIn_InitTables_SP.sql
+COPY ./CheckMeIn_CreateDummyData_SP.sql /usr/src/app/CheckMeIn_CreateDummyData_SP.sql
+
+CMD ["/bin/bash", "/usr/src/app/create-temp-db.sh"]

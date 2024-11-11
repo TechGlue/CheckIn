@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "CheckMeIn",
+			"path": "../../CheckMeIn"
+		},
+		{
+			"name": "CheckMeInDB",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"dataworkspace.excludedProjects": [
+			"CheckMeInDB/CheckMeIn.sqlproj"
+		]
+	}
+}
