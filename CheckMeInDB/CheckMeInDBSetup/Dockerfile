@@ -1,10 +1,10 @@
 # Fetch latest image for Azure SQL
-FROM mcr.microsoft.com/azure-sql-edge:latest
+FROM mcr.microsoft.com/azure-sql-edge
 
 # Set environment variables
-ENV MSSQL_SA_PASSWORD="StrongPassword!123"
-ENV ACCEPT_EULA="Y"
-ENV MSSQL_PID="Developer"
+ENV ACCEPT_EULA=1
+ENV MSSQL_SA_PASSWORD=StrongPassword!123
+ENV MSSQL_PID=Developer
 # Expose port 1433 for SQL Server
 EXPOSE 1433
 
