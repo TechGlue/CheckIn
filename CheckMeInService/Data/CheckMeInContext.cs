@@ -10,7 +10,11 @@ public class CheckMeInContext : DbContext
     public DbSet<CheckIn> CheckIn { get; set; }
     public DbSet<CheckInHistory> CheckInHistory { get; set; }
 
-    private string ConnectionString { get; set; }
+    private string? ConnectionString { get; set; }
+
+    public CheckMeInContext(DbContextOptions<CheckMeInContext> options) : base(options)
+    {
+    }
 
     public CheckMeInContext(string connectionString)
     {
