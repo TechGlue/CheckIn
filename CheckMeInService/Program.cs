@@ -7,6 +7,7 @@ var settings = new DatabaseSettings("appsettings.json");
 // builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddSwaggerGen();
+// at this point no connection string is set. 
 builder.Services.AddDbContext<CheckMeInContext>(options => options.UseSqlServer(settings.GetConnection()));
 builder.Services.AddControllers();
 

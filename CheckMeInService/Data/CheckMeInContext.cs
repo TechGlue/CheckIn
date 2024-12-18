@@ -20,9 +20,4 @@ public class CheckMeInContext : DbContext
     {
         ConnectionString = connectionString;
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(ConnectionString);
-    }
 }

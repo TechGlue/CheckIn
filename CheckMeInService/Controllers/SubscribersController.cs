@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CheckMeInService.Controllers;
 
-public class SubscriberController : BaseController
+public class SubscribersController : BaseController
 {
     private readonly CheckMeInContext _checkMeInContext;
-    private readonly ILogger<SubscriberController> _logger;
+    private readonly ILogger<SubscribersController> _logger;
 
-    public SubscriberController(CheckMeInContext checkMeInContext, ILogger<SubscriberController> logger)
+    public SubscribersController(CheckMeInContext checkMeInContext, ILogger<SubscribersController> logger)
     {
         _checkMeInContext = checkMeInContext;
         _logger = logger;
@@ -24,7 +24,7 @@ public class SubscriberController : BaseController
     }
 
     // double check if we want to keep this 
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(Subscriber), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -34,33 +34,35 @@ public class SubscriberController : BaseController
 
         if (subscriber == null)
         {
-            return NotFound();
+            return NotFound("Invalid id provided");
         }
 
         var subscriberResponse = SubscriberToGetSubscriberResponse(subscriber);
         return Ok(subscriberResponse);
     }
 
-    [HttpPost("{firstName}, {lastName}, {phoneNumber}, {subscriptionName}")]
+    [HttpPost()]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateActiveSubscription(string firstName, string lastName, string phoneNumber,
-        string subscriptionName)
+    public async Task<IActionResult> CreateActiveSubscription([FromQuery] string firstName, [FromQuery] string lastName,
+        [FromQuery] string phoneNumber,
+        [FromQuery] string subscriptionName)
     {
         _logger.LogInformation("Creating a new subscription for: {PhoneNumber}", phoneNumber);
 
         // Grab subscription 
         OfferedSubscriptions? offeredSubscription =
-            await _checkMeInContext.OfferedSubscriptions.FindAsync(subscriptionName);
+            await _checkMeInContext.OfferedSubscriptions.SingleOrDefaultAsync( x=> x.SubscriptionName == subscriptionName);
 
         if (offeredSubscription is null)
         {
             _logger.LogWarning($"Given subscription is not available {subscriptionName}", subscriptionName);
             return NotFound("Subscription is currently not being offered.");
         }
-
-        Subscriber? subscriber = await _checkMeInContext.Subscribers.FindAsync(phoneNumber);
+        
+        Subscriber? subscriber = await _checkMeInContext.Subscribers.SingleOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        
 
         if (subscriber is null)
         {
@@ -74,9 +76,19 @@ public class SubscriberController : BaseController
             _checkMeInContext.Subscribers.Add(subscriber);
             await _checkMeInContext.SaveChangesAsync();
         }
+        
+        
+        // check if subscriber has an active subscription before creating a new one 
+        ActiveSubscriptions? newSubscriptions = await _checkMeInContext.ActiveSubscriptions.SingleOrDefaultAsync(x => x.SubscriptionId == offeredSubscription.SubscriptionId && x.SubscriberId == subscriber.SubscriberId);;
 
+        if (newSubscriptions is not null)
+        {
+            _logger.LogWarning($"{firstName} is already enrolled into {subscriptionName}", subscriber.FirstName, subscriptionName);
+            return NotFound($"{subscriber.FirstName} is already enrolled into {offeredSubscription.SubscriptionName}");
+        }
+        
         // go and create the subscription
-        ActiveSubscriptions newSubscriptions = new ActiveSubscriptions()
+        newSubscriptions = new ActiveSubscriptions()
         {
             ActiveSubscriptionId = Guid.NewGuid(),
             SubscriberId = subscriber.SubscriberId,
@@ -88,7 +100,7 @@ public class SubscriberController : BaseController
         _checkMeInContext.ActiveSubscriptions.Add(newSubscriptions);
         await _checkMeInContext.SaveChangesAsync();
 
-        return Ok(newSubscriptions);
+        return Ok();
     }
 
 

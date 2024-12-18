@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CheckMeInService.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("v1/[controller]")]
 [Produces("application/json")]
 public abstract class BaseController: Controller
 {
