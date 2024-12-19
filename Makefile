@@ -2,13 +2,16 @@ run:
 	docker-compose build
 	docker-compose up -d
 
-start-dev: 
-	docker build CheckMeInDB/.
-	docker run --platform linux/amd64 --cap-add SYS_PTRACE -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=StrongPassword!123' -p 1433:1433 --name azure-sql-edge -d mcr.microsoft.com/azure-sql-edge
-
-clean: 
+clean:
+	if [ -z "$(shell docker ps -a -q)" ]; then \
+		echo "No containers to remove"; \
+	else \
+		docker stop $(shell docker ps -a -q); \
+		docker rm $(shell docker ps -a -q); \
+	fi
 	docker-compose down -v
 
 clean-all:
+	echo "Removing all containers and prune"
 	docker-compose down -v
 	docker system prune

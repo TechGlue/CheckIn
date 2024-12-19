@@ -4,7 +4,8 @@
   #   build:
   #     context: .
   #     dockerfile: CheckMeInService/Dockerfile
-  formula_dashboard:
+  
+  azure_aspire_dashboard:
     image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
     container_name: dashboard
     ports:
@@ -12,6 +13,17 @@
       - 18889:18889
     networks:
       - open
+
+  local_azuredb:
+    image: mcr.microsoft.com/azure-sql-edge
+    platform: linux/amd64
+    cap_add:
+      - SYS_PTRACE
+    environment:
+      - ACCEPT_EULA=1
+      - MSSQL_SA_PASSWORD=StrongPassword!123
+    ports:
+      - "1433:1433"
 
 networks:
   open:
