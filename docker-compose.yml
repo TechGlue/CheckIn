@@ -1,6 +1,0 @@
-﻿services:
-  checkmeinservice:
-    image: checkmeinservice
-    build:
-      context: .
-      dockerfile: CheckMeInService/Dockerfile

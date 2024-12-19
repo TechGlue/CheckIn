@@ -1,0 +1,17 @@
+﻿services:
+  # checkmeinservice:
+  #   image: checkmeinservice
+  #   build:
+  #     context: .
+  #     dockerfile: CheckMeInService/Dockerfile
+  formula_dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
+    container_name: dashboard
+    ports:
+      - 18888:18888
+      - 18889:18889
+    networks:
+      - open
+
+networks:
+  open:

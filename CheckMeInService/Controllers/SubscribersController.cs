@@ -20,6 +20,7 @@ public class SubscribersController : BaseController
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     public IActionResult TestSubscribers()
     {
+        _logger.LogWarning("Subscribers API is up");
         return Ok("Subscribers Controllers is working");
     }
 
@@ -102,7 +103,6 @@ public class SubscribersController : BaseController
 
         return Ok();
     }
-
 
     private static Subscriber SubscriberToGetSubscriberResponse(Subscriber subscriber)
     {
