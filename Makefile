@@ -2,7 +2,7 @@ run:
 	docker-compose build
 	docker-compose up -d
 
-clean:
+drop:
 	if [ -z "$(shell docker ps -a -q)" ]; then \
 		echo "No containers to remove"; \
 	else \
@@ -15,3 +15,4 @@ clean-all:
 	echo "Removing all containers and prune"
 	docker-compose down -v
 	docker system prune
+	docker volume prune -f 

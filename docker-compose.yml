@@ -24,12 +24,13 @@
     environment:
       - ACCEPT_EULA=1
       - MSSQL_SA_PASSWORD=StrongPassword!123
+      - TrustServerCertificate=true
+      - Encrypt=false
     ports:
       - "1433:1433"
     # copy file to container
-    volumes:
-      - ./CheckMeInDB:/var/opt/mssql/data
-
+    # volumes:
+    #   - ./CheckMeInDB:/var/opt/mssql/data
 
 networks:
   open:
