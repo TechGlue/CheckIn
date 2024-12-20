@@ -15,7 +15,9 @@
       - open
 
   local_azuredb:
-    image: mcr.microsoft.com/azure-sql-edge
+    build:
+      context: .
+      dockerfile: CheckMeInDB/Dockerfile
     platform: linux/amd64
     cap_add:
       - SYS_PTRACE
@@ -25,8 +27,9 @@
     ports:
       - "1433:1433"
     # copy file to container
-    # volumes:
-    #   - /CheckMeInDB : /var/opt/mssql/data
+    volumes:
+      - ./CheckMeInDB:/var/opt/mssql/data
+
 
 networks:
   open:
