@@ -24,6 +24,9 @@
       - MSSQL_SA_PASSWORD=StrongPassword!123
     ports:
       - "1433:1433"
+    # copy file to container
+    # volumes:
+    #   - /CheckMeInDB : /var/opt/mssql/data
 
 networks:
   open:
