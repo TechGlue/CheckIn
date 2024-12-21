@@ -29,8 +29,8 @@
     ports:
       - "1433:1433"
     # load db files as a volume to container
-    # volumes:
-    #   - ./CheckMeInDB:/var/opt/mssql/data
+    volumes:
+      - ./CheckMeInDB:/var/opt/mssql/data
 
 networks:
   open:

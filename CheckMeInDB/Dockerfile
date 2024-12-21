@@ -20,5 +20,12 @@ RUN wget https://aka.ms/sqlpackage-linux -O sqlpackage.zip \
 USER mssql
 EXPOSE 1433
 
+COPY CheckMeInDB/TestDB.bacpac /var/opt/mssql/data/
+
+# Run does not work because it's too early. Run launches the command during the build process, not during the container startup.
+# RUN /bin/bash -c "/opt/sqlpackage/sqlpackage /TargetTrustServerCertificate:True /Action:Import /TargetDatabaseName:'CheckInDB' /SourceFile:'/var/opt/mssql/data/TestDB.bacpac' /TargetServerName:'127.0.0.1,1433' /TargetUser:'sa' /TargetPassword:'StrongPassword!123'"
+
+
 # revisit - trying to automate restore off bacpac file
-# CMD /bin/bash -c "/opt/sqlpackage/sqlpackage /TargetTrustServerCertificate:True /Action:Import /TargetDatabaseName:'CheckInDB' /SourceFile:'/var/opt/mssql/data/TestDB.bacpac' /TargetServerName:'127.0.0.1,1433' /TargetUser:'sa' /TargetPassword:'StrongPassword!123'"
+# this is too early too because the database is not up yet 
+CMD /bin/bash -c "/opt/sqlpackage/sqlpackage /TargetTrustServerCertificate:True /Action:Import /TargetDatabaseName:'CheckInDB' /SourceFile:'/var/opt/mssql/data/TestDB.bacpac' /TargetServerName:'127.0.0.1,1433' /TargetUser:'sa' /TargetPassword:'StrongPassword!123'"
