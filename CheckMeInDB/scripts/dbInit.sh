@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# timeout tracker, if we exceed 10 tries, we will exit
+# timeout tracker, if we exceed 5 tries, we will exit
 timeoutTracker=1
 
 # Loop until SQL Server is started and responsive 
