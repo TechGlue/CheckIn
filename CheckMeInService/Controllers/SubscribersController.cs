@@ -4,6 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CheckMeInService.Controllers;
 
+// Todo:  
+// write tests for all of the factory patterns 
+// Refactor controllers into smaller pieces 
+// Testing for the add subscription and remove subscription endpoints 
+// Remove subscription  
+// No need for update as once enrolled there isn't much to change
+
 public class SubscribersController : BaseController
 {
     private readonly CheckMeInContext _checkMeInContext;
@@ -51,10 +58,9 @@ public class SubscribersController : BaseController
         [FromQuery] string subscriptionName)
     {
         _logger.LogInformation("Creating a new subscription for: {PhoneNumber}", phoneNumber);
-
         // Grab subscription 
         OfferedSubscriptions? offeredSubscription =
-            await _checkMeInContext.OfferedSubscriptions.SingleOrDefaultAsync( x=> x.SubscriptionName == subscriptionName);
+            await _checkMeInContext.OfferedSubscriptions.SingleOrDefaultAsync( x=> x.SubscriptionName == "Exercise");
 
         if (offeredSubscription is null)
         {

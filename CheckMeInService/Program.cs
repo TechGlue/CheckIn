@@ -9,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 var settings = new DatabaseSettings("appsettings.json");
 
 // builder.Services.AddFluentValidationAutoValidation();
-
 builder.Services.AddSwaggerGen();
 // at this point no connection string is set. 
 builder.Services.AddDbContext<CheckMeInContext>(options => options.UseSqlServer(settings.GetConnection()));
@@ -38,10 +37,20 @@ builder.Logging.AddOpenTelemetry(options =>
 
 var app = builder.Build();
 
-if (settings.TestDatabaseConnection() is false) throw new Exception("Unable to connect to the database");
+if (settings.TestDatabaseConnection() is false)
+{ 
+    app.Logger.LogError("Unable to connect to the database. Check configuration or database availability");
+    throw new Exception("Unable to connect to the database");
+}
+
 
 app.MapControllers();
+
 app.Run();
+
+
+app.Logger.LogInformation("CheckMeIn successfully connected to database");
+app.Logger.LogInformation("CheckMeIn API started");
 
 public partial class Program
 {
