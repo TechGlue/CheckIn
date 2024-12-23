@@ -1,6 +1,7 @@
 run: 
 	docker-compose build
 	docker-compose up -d
+	./CheckMeInDB/scripts/dbInit.sh
 
 drop:
 	if [ -z "$(shell docker ps -a -q)" ]; then \
