@@ -4,6 +4,11 @@
     &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.CheckInQueriesTests&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.OfferedSubscriptionsRepositoryTests.GetById_ValidGuid_ReturnsSubscription&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.OfferedSubscriptionsRepositoryTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersController_Tests.CreateActiveSubscription_ReturnsOK&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersControllerTests.CreateActiveSubscription_ReturnsOK&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersControllerTests.TestSubscribers_ReturnsOK&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersControllerTests.CreateActiveSubscription_ReturnsNotFound_InvalidSubscription&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersControllerTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4af3c457_002D22d9_002D4ee0_002D952a_002Dfd26c8850b3f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;CheckMeInServices_Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
