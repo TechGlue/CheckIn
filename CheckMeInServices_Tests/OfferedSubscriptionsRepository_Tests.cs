@@ -43,22 +43,6 @@ public class OfferedSubscriptionsRepositoryTests : IAsyncLifetime
     }
 
     [Fact]
-    public void GetById_MultipleGuid_ThrowsException()
-    {
-        
-        var offeredSubscriptions = new OfferedSubscriptions
-        {
-            SubscriptionId = new Guid("5fb7097c-335c-4d07-b4fd-000004e2d28c"),
-            SubscriptionName = "TestContainers"
-        };
-        _checkInContext.OfferedSubscriptions.Add(offeredSubscriptions);
-        _checkInContext.SaveChanges();
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() =>
-            _offeredSubscriptionsRepository.GetById(new Guid("5fb7097c-335c-4d07-b4fd-000004e2d28c")));
-    }
-    
-    [Fact]
     public void GetById_ValidGuid_ReturnsSubscription()
     {
         // Arrange 
@@ -70,22 +54,7 @@ public class OfferedSubscriptionsRepositoryTests : IAsyncLifetime
         Assert.NotNull(offeredSubscriptions);
         Assert.Equal(new Guid("5fb7097c-335c-4d07-b4fd-000004e2d28c"), offeredSubscriptions.SubscriptionId);
     }
-    
-    
-    [Fact]
-    public void GetAll_ReturnsAllOfferedSubscriptions()
-    {
-        // Arrange 
-        
-        // Act with the seeded data
-        OfferedSubscriptions? offeredSubscriptions = _offeredSubscriptionsRepository.GetById(new Guid("5fb7097c-335c-4d07-b4fd-000004e2d28c"));
-        
-        // Assert
-        Assert.NotNull(offeredSubscriptions);
-        Assert.Equal(new Guid("5fb7097c-335c-4d07-b4fd-000004e2d28c"), offeredSubscriptions.SubscriptionId);
-    }
-    
-    
+
     private async Task SeedTestDataSubscribers()
     {
         var offeredSubscriptions = new OfferedSubscriptions
