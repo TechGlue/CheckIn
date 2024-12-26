@@ -1,14 +1,26 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=31e23086_002Dbda2_002D4e15_002D8bbd_002Db49585c13d59/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="LogCheckIn_GivenValidSubscription_ReturnsTrue" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=31e23086_002Dbda2_002D4e15_002D8bbd_002Db49585c13d59/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LogCheckIn_GivenValidSubscription_ReturnsTrue" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.CheckInQueriesTests&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.OfferedSubscriptionsRepositoryTests.GetById_ValidGuid_ReturnsSubscription&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.OfferedSubscriptionsRepositoryTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersController_Tests.TestSubscribers_ReturnsOK&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersController_Tests.TestSubscribersController_ReturnsOK&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4af3c457_002D22d9_002D4ee0_002D952a_002Dfd26c8850b3f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;CheckMeInServices_Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/luisg/PersonalProjects/CheckMeIn/CheckMeInServices_Tests" Presentation="&amp;lt;CheckMeInServices_Tests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=540ff2f9_002D5bbf_002D480f_002D998a_002Db36cadf184ad/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestSubscribersController_ReturnsOK #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersController_Tests.TestSubscribersController_ReturnsOK&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d0abde7a_002D7f80_002D42b4_002Da1f2_002D28223482c7da/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AddNewSubscription_GivenValidSubscriptionName_RegisterSubscriptionForUser" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/luisg/PersonalProjects/CheckMeIn/CheckMeInServices_Tests" Presentation="&amp;lt;CheckMeInServices_Tests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d1ab9314_002D1f7f_002D4da2_002Da5f8_002D80599242bf17/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestSubscribersController_ReturnsOK" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::A8FCF85E-B9D5-4EEA-8301-6E6FD3D5F94C::net8.0::CheckMeInServices_Tests.SubscribersController_Tests.TestSubscribersController_ReturnsOK&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
