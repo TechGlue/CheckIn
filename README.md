@@ -53,7 +53,7 @@ Query the database using an API testing tool. I prefer Postman, as it is the mos
 **Parameters:**
   - phoneNumber
 
-**/api/subscribers**
+**/api/subscribers/**
 - **addsubscription** (Creates a new user and registers user.)<br/>
 **Parameters:**
   - firstName
