@@ -7,10 +7,10 @@ public static class SubscribersApi
 {
     public static RouteGroupBuilder MapSubscribersApi(this RouteGroupBuilder group)
     {
-        group.MapGet("/Test",
+        group.MapGet("/test",
             () => Results.Ok("API is working"));
         
-        group.MapPost("/AddSubscription",
+        group.MapPost("/addsubscription",
             (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string firstName, string lastName,
                 string phoneNumber,
                 string subscriptionName) =>
