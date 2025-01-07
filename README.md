@@ -46,22 +46,55 @@ Query the database using an API testing tool. I prefer Postman, as it is the mos
 
 ### Routes
 **/api/checkins/**
-- **Unenroll** (Removes user given a phone number/email from the checkins table)<br/>
+- **unenroll** (Removes user given a phone number/email from the checkins table)<br/>
 **Parameters:**
   - phoneNumber
-- **LogDaily** (Creates a new checkin entry given a phone number/email.)<br/>
+- **logdaily** (Creates a new checkin entry given a phone number/email.)<br/>
 **Parameters:**
   - phoneNumber
 
 **/api/subscribers**
-- **AddSubscription** (Creates a new user and registers user.)<br/>
+- **addsubscription** (Creates a new user and registers user.)<br/>
 **Parameters:**
   - firstName
   - lastName
   - phoneNumber
   - subscriptionName
 
-**Future work**: building up a development container with a local database and swagger setup. 
+### Creating and using a local AzureSQL database  
+AzureSQL, being a cloud-based service, it can be a hassle creating cloud environments for development and testing. Luckily, they have a docker image that can be used to create a local instance of AzureSQL.
+
+
+The project during development makes use of a local database. To start the local database, run the following command:
+```bash
+make run 
+```
+
+What's going on under the hood?
+- The command starts a local Azure SQL Server leveraging the [SQL Edge Image](https://hub.docker.com/r/microsoft/azure-sql-edge)
+- The initialization script **dbInit.sh** is going to look for an active database connection. If found it will create the database and tables by restoring from a bacpac file. If for whatever reason the database connection is not found, it will simply time out.
+
+Configure the local database connection string in the appsettings.json file for the service:
+```json
+{
+    "AzureSQL": {
+        "DataSource": "127.0.0.1,1433",
+        "UserId": "SA",
+        "Password": "StrongPassword!123",
+        "InitialCatalog": "CheckInDB"
+    }
+}
+```
+
+Add your EntraId configuration and you're ready to go!
+
+### Stop and delete all currently active containers
+(Note: if you have other containers running, this command will stop and delete them.)
+```bash
+To clean up the local database, run the following command:
+```bash
+make drop 
+```
 
 ## Misc.
 [Design and architecture](Docs/Design.md)

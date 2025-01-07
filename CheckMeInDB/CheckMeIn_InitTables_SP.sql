@@ -52,9 +52,17 @@ BEGIN
 	  )
 
 	  -- Load the default OfferedSubscription
-	  INSERT INTO OfferedSubscriptions (SubscriptionName)
-	  VALUES ('Exercise')
+	  INSERT INTO OfferedSubscriptions ( SubscriptionID, SubscriptionName)
+	  VALUES ('abcdef12-3456-7890-abcd-ef1234567890', 'Exercise')
 
+	  INSERT INTO Subscribers (SubscriberID, FirstName, LastName, PhoneNumber)
+	  VALUES ('12345678-1234-1234-1234-123456789abc', 'testerFirstName', 'testerLastName', '555-555-5555');
+
+	  INSERT INTO ActiveSubscriptions 
+	  (ActiveSubscriptionID, SubscriberID, SubscriptionID, SubscriptionStartDate, PhoneNumber) 
+	  VALUES 
+	  ('abcdef12-3456-7890-abcd-ef1234561111', '12345678-1234-1234-1234-123456789abc', 'abcdef12-3456-7890-abcd-ef1234567890', '2021-01-01', '555-555-5555');
+	  
     END TRY
     BEGIN CATCH
         SELECT

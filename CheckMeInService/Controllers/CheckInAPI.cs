@@ -7,11 +7,11 @@ public static class CheckInApi
 {
     public static RouteGroupBuilder MapCheckInApi(this RouteGroupBuilder group)
     {
-        group.MapGet("/Test",
+        group.MapGet("/test",
             () => Results.Ok("API is working"));
 
         // Un-Enroll Active Subscription 
-        group.MapDelete("/Unenroll",
+        group.MapDelete("/unenroll",
             (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string phoneNumber, string subscriptionName) =>
             {
                 // First identify the active subscription 
@@ -31,7 +31,7 @@ public static class CheckInApi
                     : Results.BadRequest("Unable to un-enroll active subscription");
             });
 
-        group.MapPut("/LogDaily",
+        group.MapPut("/logDaily",
             (SubscriptionQueries subscriptionQueries, CheckInQueries checkInQueries, string phoneNumber, string subscriptionName) =>
             {
                 // First identify the active subscription 
