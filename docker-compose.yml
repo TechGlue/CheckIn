@@ -1,6 +1,23 @@
 ﻿services:
-  checkmeinservice:
-    image: checkmeinservice
+  local_azuredb:
     build:
       context: .
-      dockerfile: CheckMeInService/Dockerfile
+      dockerfile: CheckMeInDB/Dockerfile
+    platform: linux/amd64
+    cap_add:
+      - SYS_PTRACE
+    environment:
+      - ACCEPT_EULA=1
+      - MSSQL_SA_PASSWORD=StrongPassword!123
+      - TrustServerCertificate=true
+      - Encrypt=false
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-U", "sa", "-P", "StrongPassword!123", "-Q", "SELECT 1" ]
+      interval: 5s
+      timeout: 5s
+      retries: 2
+
+networks:
+  open:
