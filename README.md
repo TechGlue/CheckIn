@@ -90,7 +90,7 @@ Add your EntraId configuration and you're ready to go!
 
 ### Stop and delete all currently active containers
 (Note: if you have other containers running, this command will stop and delete them.)
-```bash
+
 To clean up the local database, run the following command:
 ```bash
 make drop 
